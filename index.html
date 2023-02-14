@@ -20,6 +20,7 @@
   v-cloak
   class="grid place-content:center gap:2em py:2em min-height:100vh bg:linen user-select:none"
   @vue:mounted="init()"
+  v-effect="setProgress()"
 >
   <section v-for="item of items">
     <h2 class="mb:.5em">
