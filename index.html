@@ -18,31 +18,33 @@
 </head>
 <body
   v-cloak
-  class="grid place-content:center gap:2em py:2em min-height:100vh bg:linen user-select:none"
+  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font-size:18px font-size:1.5vw@lg bg:linen user-select:none"
   @vue:mounted="init()"
   v-effect="setProgress()"
 >
-  <section v-for="item of items">
+  <section v-for="item of items" class="w:22em@xs">
     <h2 class="mb:.5em">
       {{ item.title }}
       <span v-show="item.progress > 0">{{ item.progress }}%</span>
     </h2>
     <label
       v-for="(step, id) of item.steps"
-      class="position:relative mb:.25em flex align-items-center cursor:pointer"
+      class="position:relative py:.25em flex align-items-center cursor:pointer"
       :class="{ 'color:darkgray text-decoration:line-through': step.completed }"
       @click.prevent="completeStep(item, id);"
     >
-      <div
+      <span
         v-show="step.completed"
-        class="position:absolute top:.1em w:.5em h:.5em rotate(-45deg) flex align-items:center font:1.5em"
-      >⌙</div>
+        class="position:absolute left:0.05em top:.4em w:.5em h:.5em rotate(-45deg) flex align-items:center font:120%"
+      >⌙</span>
       <input type="checkbox"
         :name="step.step" :value="step.completed"
         class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid|dimgray r:.1em"
         :class="{ 'border-color:darkgray': step.completed }"
       >
-      {{ id + 1}}. {{ step.step }}
+      <span class="w:95% flex">{{ id + 1}}.&nbsp;
+        <div>{{ step.step }}</div>
+      </span>
     </label>
   </section>
 </body>
