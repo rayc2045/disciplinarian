@@ -22,7 +22,10 @@
   @vue:mounted="init()"
 >
   <section v-for="item of items">
-    <h2 class="mb:.5em">{{ item.title }}</h2>
+    <h2 class="mb:.5em">
+      {{ item.title }}
+      <span v-show="item.progress > 0">{{ item.progress }}%</span>
+    </h2>
     <label
       v-for="(step, id) of item.steps"
       class="position:relative mb:.25em flex align-items-center cursor:pointer"
