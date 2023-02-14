@@ -4,6 +4,7 @@ import utils from './esm/utils.js';
 import items from './esm/items.js';
 
 const App = {
+  isDisabled: false,
   init() {
     for (const item of items) {
       item.steps = item.steps
@@ -11,8 +12,17 @@ const App = {
         .map(step => ({ step, completed: false }));
     }
   },
+  update() {
+    if (typeof items[0].steps === 'string') return;
+    for (const item of items) {
+      item.progress = utils.getPercentage(
+        item.steps.filter(step => step.completed).length,
+        item.steps.length
+      );
+    }
+  },
   completeStep(item, id) {
-    if (document.querySelector('canvas')) return;
+    if (this.isDisabled) return;
     if (id > 0 && !item.steps[id - 1].completed) return;
 
     if (
@@ -25,19 +35,12 @@ const App = {
     item.steps[id].completed = true;
 
     if (item.steps.every(step => step.completed)) {
+      this.isDisabled = true;
       confetti();
       setTimeout(() => {
         for (const step of item.steps) step.completed = false;
+        this.isDisabled = false;
       }, 3000);
-    }
-  },
-  setProgress() {
-    if (typeof items[0].steps === 'string') return;
-    for (const item of items) {
-      item.progress = utils.getPercentage(
-        item.steps.filter(step => step.completed).length,
-        item.steps.length
-      );
     }
   },
 };
