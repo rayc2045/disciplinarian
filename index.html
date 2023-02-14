@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nap Kitchen Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Sans TC', sans-serif; }
+    [v-cloak] { display: none; }
+  </style>
+  <link href="https://cdn.master.co/normal.css" rel="stylesheet">
+  <script src="https://cdn.master.co/css"></script>
+  <script src="./src/scripts/script.js" type="module"></script>
+</head>
+<body
+  v-cloak
+  class="grid place-content:center gap:2em py:2em min-height:100vh bg:linen user-select:none"
+  @vue:mounted="init()"
+>
+  <section v-for="item of items">
+    <h2 class="mb:.5em">{{ item.title }}</h2>
+    <label
+      v-for="(step, id) of item.steps"
+      class="position:relative mb:.25em flex align-items-center cursor:pointer"
+      :class="{ 'color:darkgray text-decoration:line-through': step.completed }"
+      @click.prevent="completeStep(item, id);"
+    >
+      <div
+        v-show="step.completed"
+        class="position:absolute top:.1em w:.5em h:.5em rotate(-45deg) flex align-items:center font:1.5em"
+      >⌙</div>
+      <input type="checkbox"
+        :name="step.step" :value="step.completed"
+        class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid|dimgray r:.1em"
+        :class="{ 'border-color:darkgray': step.completed }"
+      >
+      {{ id + 1}}. {{ step.step }}
+    </label>
+  </section>
+</body>
+</html>
