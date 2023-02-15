@@ -18,7 +18,7 @@
 </head>
 <body
   v-cloak
-  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font-size:18px font-size:1.5vw@lg bg:linen user-select:none"
+  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font-size:18px font-size:1.5vw@lg bg:linen@light bg:#333@dark user-select:none"
   @vue:mounted="init()"
   v-effect="update()"
   @contextmenu.prevent="$event.target.click()"
@@ -46,11 +46,11 @@
       >⌙</span>
       <input type="checkbox"
         :name="step.step" :value="step.completed"
-        class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid|dimgray r:.1em"
+        class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid border-color:dimgray@light border-color:whitesmoke@dark r:.1em"
         :class="{
           'cursor:pointer': step.editable,
           'pointer-events:none': !step.editable,
-          'border-color:darkgray': step.completed
+          'border-color:darkgray@light': step.completed
         }"
       >
       <span class="w:95% flex">{{ id + 1}}.&nbsp;
