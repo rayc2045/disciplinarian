@@ -21,17 +21,21 @@
   class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font-size:18px font-size:1.5vw@lg bg:linen user-select:none"
   @vue:mounted="init()"
   v-effect="update()"
+  @contextmenu.prevent="$event.target.click()"
 >
   <section v-for="item of items" class="w:20em@xs">
-    <h2 class="mb:.5em">
+    <h2 class="flex align-items:center">
       {{ item.title }}
-      <span v-show="item.progress > 0">{{ item.progress }}%</span>
+      <sup v-show="item.completeTimes > 0" class="margin-left:.3em">{{ item.completeTimes }}</sup>
+      <div v-show="item.progress > 0" class="margin-left:auto">｜{{ item.progress }}%</div>
     </h2>
+    <hr class="my:.5em border-bottom:.1em|solid">
     <label
       v-for="(step, id) of item.steps"
-      class="position:relative py:.25em flex align-items-center cursor:pointer"
+      class="position:relative py:.25em flex align-items-center"
       :class="{
-        'cursor:default pointer-events:none': isDisabled,
+        'cursor:pointer': step.editable,
+        'pointer-events:none': !step.editable,
         'color:darkgray text-decoration:line-through': step.completed,
       }"
       @click.prevent="completeStep(item, id);"
@@ -42,8 +46,12 @@
       >⌙</span>
       <input type="checkbox"
         :name="step.step" :value="step.completed"
-        class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid|dimgray r:.1em cursor:pointer"
-        :class="{ 'border-color:darkgray': step.completed }"
+        class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid|dimgray r:.1em"
+        :class="{
+          'cursor:pointer': step.editable,
+          'pointer-events:none': !step.editable,
+          'border-color:darkgray': step.completed
+        }"
       >
       <span class="w:95% flex">{{ id + 1}}.&nbsp;
         <div>{{ step.step }}</div>
