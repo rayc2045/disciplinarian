@@ -69,7 +69,7 @@ const App = {
   },
   confetti(times = 0) {
     confetti();
-    if (times > 0) this.confetti(times - 1);
+    if (times > 1) this.confetti(times - 1);
   },
 };
 
