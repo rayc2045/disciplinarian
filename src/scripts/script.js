@@ -21,38 +21,33 @@ const App = {
         item.steps.filter(step => step.completed).length,
         item.steps.length
       );
-      // set editable
-      for (const stepId in item.steps) item.steps[stepId].editable = false;
+
       const completedStepsNum = item.steps.filter(
         step => step.completed
       ).length;
       const lastCompleteId = completedStepsNum - 1;
-      if (completedStepsNum === item.steps.length) item.steps[lastCompleteId].editable = false;
-      else if (lastCompleteId < 0) item.steps[0].editable = true;
+
+      for (const step of item.steps) step.editable = false;
+      if (lastCompleteId < 0) item.steps[0].editable = true;
       else {
-        if (lastCompleteId > 1) item.steps[lastCompleteId - 1].editable = false;
         item.steps[lastCompleteId].editable = true;
         if (completedStepsNum < item.steps.length)
           item.steps[lastCompleteId + 1].editable = true;
+        if (item.steps.at(-1).completed) item.steps.at(-1).editable = false;
       }
     }
   },
   completeStep(item, id) {
-    // if (id > 0 && !item.steps[id - 1].completed) return;
-    // if (
-    //   id !== item.steps.length - 1 &&
-    //   item.steps[id].completed &&
-    //   !item.steps[id + 1].completed
-    // )
-    //   return (item.steps[id].completed = false);
     if (item.steps[id].editable)
       item.steps[id].completed = !item.steps[id].completed;
 
     if (item.steps.every(step => step.completed)) {
+      item.steps.at(-1).editable = false;
       confetti();
       setTimeout(() => {
-        for (const step of item.steps) step.completed = false;
         item.completeTimes++;
+        for (const step of item.steps) step.completed = false;
+        item.steps[0].editable = true;
       }, 3000);
     }
   },
