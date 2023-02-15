@@ -1,53 +1,69 @@
-import { createApp } from 'https://esm.sh/petite-vue';
+import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
-import items from './esm/items.js';
+import example from './esm/example.js';
+
+const items = reactive(example);
+/*
+items = [
+  {
+    title: '...',
+    completeTimes: 0,
+    progress: 0,
+    tasks: [
+      { task: '...', completed: false, editable: false },
+      { task: '...', completed: false, editable: false },
+      { task: '...', completed: false, editable: false },
+    ]
+  },
+]
+*/
 
 const App = {
   init() {
     for (const item of items) {
       item.completeTimes = 0;
-      item.steps = item.steps.split('，').map(step => ({
-        step,
+      item.tasks = item.tasks.split('；').map(task => ({
+        task,
         completed: false,
         editable: false,
       }));
     }
   },
   update() {
-    if (typeof items[0].steps === 'string') return;
+    if (typeof items[0].tasks === 'string') return;
     for (const item of items) {
       item.progress = utils.getPercentage(
-        item.steps.filter(step => step.completed).length,
-        item.steps.length
+        item.tasks.filter(task => task.completed).length,
+        item.tasks.length
       );
 
-      const completedStepsNum = item.steps.filter(
-        step => step.completed
+      const completedTasksNum = item.tasks.filter(
+        task => task.completed
       ).length;
-      const lastCompleteId = completedStepsNum - 1;
+      const lastCompleteId = completedTasksNum - 1;
 
-      for (const step of item.steps) step.editable = false;
-      if (lastCompleteId < 0) item.steps[0].editable = true;
+      for (const task of item.tasks) task.editable = false;
+      if (lastCompleteId < 0) item.tasks[0].editable = true;
       else {
-        item.steps[lastCompleteId].editable = true;
-        if (completedStepsNum < item.steps.length)
-          item.steps[lastCompleteId + 1].editable = true;
-        if (item.steps.at(-1).completed) item.steps.at(-1).editable = false;
+        item.tasks[lastCompleteId].editable = true;
+        if (completedTasksNum < item.tasks.length)
+          item.tasks[lastCompleteId + 1].editable = true;
+        if (item.tasks.at(-1).completed) item.tasks.at(-1).editable = false;
       }
     }
   },
-  completeStep(item, id) {
-    if (item.steps[id].editable)
-      item.steps[id].completed = !item.steps[id].completed;
+  completeTask(item, id) {
+    if (item.tasks[id].editable)
+      item.tasks[id].completed = !item.tasks[id].completed;
 
-    if (item.steps.every(step => step.completed)) {
-      item.steps.at(-1).editable = false;
+    if (item.tasks.every(task => task.completed)) {
+      item.tasks.at(-1).editable = false;
       confetti();
       setTimeout(() => {
         item.completeTimes++;
-        for (const step of item.steps) step.completed = false;
-        item.steps[0].editable = true;
+        for (const task of item.tasks) task.completed = false;
+        item.tasks[0].editable = true;
       }, 3000);
     }
   },

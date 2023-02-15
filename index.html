@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nap Kitchen Checker</title>
+  <link rel="icon" href="./assets/icon_robot.png" type="image/png">
+  <title>Disciplinarian</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -31,30 +32,30 @@
     </h2>
     <hr class="my:.5em border-bottom:.1em|solid">
     <label
-      v-for="(step, id) of item.steps"
+      v-for="(task, id) of item.tasks"
       class="position:relative py:.25em flex align-items-center"
       :class="{
-        'cursor:pointer': step.editable,
-        'pointer-events:none': !step.editable,
-        'color:darkgray text-decoration:line-through': step.completed,
+        'cursor:pointer': task.editable,
+        'pointer-events:none': !task.editable,
+        'color:darkgray text-decoration:line-through': task.completed,
       }"
-      @click.prevent="completeStep(item, id);"
+      @click.prevent="completeTask(item, id);"
     >
       <span
-        v-show="step.completed"
+        v-show="task.completed"
         class="position:absolute left:0.05em top:.4em w:.5em h:.5em rotate(-45deg) flex align-items:center font:120%"
       >⌙</span>
       <input type="checkbox"
-        :name="step.step" :value="step.completed"
+        :name="task.task" :value="task.completed"
         class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid border-color:dimgray@light border-color:whitesmoke@dark r:.1em"
         :class="{
-          'cursor:pointer': step.editable,
-          'pointer-events:none': !step.editable,
-          'border-color:darkgray@light': step.completed
+          'cursor:pointer': task.editable,
+          'pointer-events:none': !task.editable,
+          'border-color:darkgray@light': task.completed
         }"
       >
       <span class="w:95% flex">{{ id + 1}}.&nbsp;
-        <div>{{ step.step }}</div>
+        <div>{{ task.task }}</div>
       </span>
     </label>
   </section>
