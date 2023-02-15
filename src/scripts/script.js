@@ -59,13 +59,17 @@ const App = {
 
     if (item.tasks.every(task => task.completed)) {
       item.tasks.at(-1).editable = false;
-      confetti();
+      this.confetti(3);
       setTimeout(() => {
         item.completeTimes++;
         for (const task of item.tasks) task.completed = false;
         item.tasks[0].editable = true;
       }, 3000);
     }
+  },
+  confetti(times = 0) {
+    confetti();
+    if (times > 0) this.confetti(times - 1);
   },
 };
 
