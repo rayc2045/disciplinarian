@@ -4,45 +4,33 @@ import utils from './esm/utils.js';
 
 const param = utils.getQueryParams();
 const items = reactive([]);
-/*
-items = [
-  {
-    title: '...',
-    open: false,
-    completeTimes: 0,
-    progress: 0,
-    descriptions: []
-    tasks: [
-      { task: '...', completed: false, editable: false },
-      { task: '...', completed: false, editable: false },
-      { task: '...', completed: false, editable: false },
-    ]
-  },
-]
-*/
 
 const App = {
   async init() {
     const txt = await fetch('/data/todo.txt').then(res => res.text());
-    for (const paragraph of txt.split('\n\n')) {
+    txt.split('\n\n').forEach((paragraph, idx) => {
+      // parse txt
       const data = { title: '', descriptions: [], tasks: [] };
-      paragraph.split('\n').forEach((p, idx) => {
-        if (idx === 0) return (data.title = p);
-        if (p.startsWith('-'))
-          return data.descriptions.push(p.replace('- ', ''));
-        data.tasks.push(p);
+      paragraph.split('\n').forEach((line, lineIdx) => {
+        if (lineIdx === 0) return (data.title = line);
+        if (line.startsWith('-'))
+          return data.descriptions.push(line.replace('- ', ''));
+        data.tasks.push(line);
       });
-      items.push(data);
-    }
-    for (const item of items) {
-      item.open = param.hasOwnProperty('open');
-      item.completeTimes = 0;
-      item.tasks = item.tasks.map(task => ({
-        task,
-        completed: false,
-        editable: false,
-      }));
-    }
+      // init items
+      items[idx] = {
+        title: data.title,
+        open: param.hasOwnProperty('open'),
+        completeTimes: 0,
+        progress: 0,
+        descriptions: data.descriptions,
+        tasks: data.tasks.map(task => ({
+          task,
+          completed: false,
+          editable: false,
+        })),
+      };
+    });
   },
   update() {
     for (const item of items) {
@@ -82,7 +70,7 @@ const App = {
   },
 };
 
-createApp({ ...App, items, utils }).mount();
+createApp({ ...App, items }).mount();
 
 if (param.hasOwnProperty('autoclose') && !param.hasOwnProperty('open')) {
   window.onscroll = () => {
