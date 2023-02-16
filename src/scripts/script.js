@@ -20,7 +20,7 @@ const App = {
       // init items
       items[idx] = {
         title: data.title,
-        open: param.hasOwnProperty('open'),
+        open: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
         completeTimes: 0,
         progress: 0,
         descriptions: data.descriptions,
@@ -72,7 +72,7 @@ const App = {
 
 createApp({ ...App, items }).mount();
 
-if (param.hasOwnProperty('autoclose') && !param.hasOwnProperty('open')) {
+if (param.hasOwnProperty('autoclose')) {
   window.onscroll = () => {
     const sectionEls = Array.from(document.querySelectorAll('section'));
     sectionEls.forEach((sectionEl, idx) => {
