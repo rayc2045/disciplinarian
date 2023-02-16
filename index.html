@@ -28,7 +28,7 @@
     <h2 class="flex align-items:center cursor:pointer" @click="item.open = !item.open">
       <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span>{{ item.title }}
       <sup v-show="item.completeTimes" class="margin-left:.3em">{{ item.completeTimes }}</sup>
-      <div v-show="item.progress" class="margin-left:auto">｜{{ item.progress }}%</div>
+      <div v-show="item.progress" class="margin-left:auto content:'｜':before content:'%':after">{{ item.progress }}</div>
     </h2>
     <hr class="my:.5em border-bottom:.08em|solid">
     <div v-show="item.open">
@@ -36,9 +36,9 @@
         v-for="(task, taskId) of item.tasks"
         class="position:relative py:.25em flex align-items-center"
         :class="{
-          'cursor:pointer': task.editable,
-          'pointer-events:none': !task.editable,
           'color:darkgray text-decoration:line-through': task.completed,
+          'cursor:pointer': task.editable,
+          'pointer-events:none': !task.editable
         }"
         @click.prevent="completeTask(item, taskId);"
       >
@@ -48,11 +48,12 @@
         >⌙</span>
         <input
           type="checkbox" :name="task.task" :value="task.completed"
-          class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid border-color:dimgray@light border-color:whitesmoke@dark r:.1em"
+          class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid r:.1em"
           :class="{
+            'border-color:darkgray': task.completed,
+            'border-color:dimgray': !task.completed,
             'cursor:pointer': task.editable,
-            'pointer-events:none': !task.editable,
-            'border-color:darkgray@light': task.completed
+            'pointer-events:none': !task.editable
           }"
         >
         <span class="w:95% flex">{{ taskId + 1 }}.&nbsp;
