@@ -7,4 +7,9 @@ export default {
   getPercentage(num1, num2) {
     return Math.floor((num1 / num2) * 100);
   },
+  isVisible(el) {
+    const elTop = ~-el.getBoundingClientRect().top;
+    const elBottom = ~-el.getBoundingClientRect().bottom;
+    return elTop < window.innerHeight && elBottom >= 0;
+  },
 };

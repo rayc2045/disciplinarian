@@ -2,6 +2,7 @@ import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
 
+const param = utils.getQueryParams();
 const items = reactive([]);
 /*
 items = [
@@ -33,9 +34,8 @@ const App = {
       });
       items.push(data);
     }
-    const { open } = utils.getQueryParams();
     for (const item of items) {
-      item.open = typeof open !== 'undefined';
+      item.open = param.hasOwnProperty('open');
       item.completeTimes = 0;
       item.tasks = item.tasks.map(task => ({
         task,
@@ -83,3 +83,12 @@ const App = {
 };
 
 createApp({ ...App, items, utils }).mount();
+
+if (param.hasOwnProperty('autoclose') && !param.hasOwnProperty('open')) {
+  window.onscroll = () => {
+    const sectionEls = Array.from(document.querySelectorAll('section'));
+    sectionEls.forEach((sectionEl, idx) => {
+      if (!utils.isVisible(sectionEl)) items[idx].open = false;
+    });
+  };
+}
