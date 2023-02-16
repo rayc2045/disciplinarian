@@ -32,9 +32,19 @@
     </h2>
     <hr class="my:.5em border-bottom:.08em|solid">
     <div v-show="item.open">
+      <ul v-if="item.descriptions.length" class="mt:1em mb:.75em letter-spacing:.01em">
+        <strong class="mb:.5em block">注意事項：</strong>
+        <li
+          v-for="description of item.descriptions"
+          class="my:.25em margin-left:1.4em list-style:circle"
+        >
+          {{ description }}
+        </li>
+      </ul>
+      <hr v-if="item.descriptions.length" class="my:.5em border-bottom:.08em|outset">
       <label
         v-for="(task, taskId) of item.tasks"
-        class="position:relative py:.25em flex align-items-center"
+        class="position:relative py:.25em flex align-items-center letter-spacing:.01em"
         :class="{
           'color:darkgray text-decoration:line-through': task.completed,
           'cursor:pointer': task.editable,
