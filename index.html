@@ -27,8 +27,8 @@
   <section v-for="item of items" class="w:85vw w:20em@xs">
     <h2 class="flex align-items:center cursor:pointer" @click="item.open = !item.open">
       <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span>{{ item.title }}
-      <sup v-show="item.completeTimes" class="margin-left:.3em">{{ item.completeTimes }}</sup>
-      <div v-show="item.progress" class="margin-left:auto content:'｜':before content:'%':after">{{ item.progress }}</div>
+      <sup v-show="item.completeTimes" class="ml:.3em">{{ item.completeTimes }}</sup>
+      <div v-show="item.progress" class="ml:auto content:'｜':before content:'%':after">{{ item.progress }}</div>
     </h2>
     <hr class="my:.5em border-bottom:.08em|solid">
     <div v-show="item.open">
@@ -36,7 +36,7 @@
         <strong class="mb:.5em block">注意事項：</strong>
         <li
           v-for="description of item.descriptions"
-          class="my:.25em margin-left:1.4em list-style:circle"
+          class="my:.25em ml:1.4em list-style:circle"
         >
           {{ description }}
         </li>
@@ -46,7 +46,7 @@
         v-for="(task, taskId) of item.tasks"
         class="position:relative py:.25em flex align-items-center letter-spacing:.01em"
         :class="{
-          'color:darkgray text-decoration:line-through': task.completed,
+          'color:darkgray text:line-through': task.completed,
           'cursor:pointer': task.editable,
           'pointer-events:none': !task.editable
         }"
@@ -54,13 +54,13 @@
       >
         <span
           v-show="task.completed"
-          class="position:absolute left:0.05em top:.4em w:.5em h:.5em rotate(-45deg) flex align-items:center font:120%"
+          class="position:absolute left:0.05em top:.4em w:.5em h:.5em rotate(-45deg) flex align-items:center font:120% color:white"
         >⌙</span>
         <input
           type="checkbox" :name="task.task" :value="task.completed"
-          class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid r:.1em"
+          class="appearance:none mr:.3em translateY(.15em) w:1em h:1em border:.125em|solid r:.1em z:-1"
           :class="{
-            'border-color:darkgray': task.completed,
+            'border-color:darkgray bg:darkgray': task.completed,
             'border-color:dimgray': !task.completed,
             'cursor:pointer': task.editable,
             'pointer-events:none': !task.editable
