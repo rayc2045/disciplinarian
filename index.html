@@ -19,45 +19,47 @@
 </head>
 <body
   v-cloak
-  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font-size:1.2em font-size:1vw@3xl bg:seashell@light color:whitesmoke@dark bg:#222@dark user-select:none"
+  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font:1.2em font:1vw@3xl bg:seashell@light color:whitesmoke@dark bg:#222@dark user-select:none"
   @vue:mounted="init()"
   v-effect="update()"
   @contextmenu.prevent="$event.target.click()"
 >
-  <section v-for="item of items" class="w:20em@xs">
-    <h2 class="flex align-items:center">
-      {{ item.title }}
+  <section v-for="item of items" class="w:85vw w:20em@xs">
+    <h2 class="flex align-items:center cursor:pointer" @click="item.open = !item.open">
+      <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span>{{ item.title }}
       <sup v-show="item.completeTimes" class="margin-left:.3em">{{ item.completeTimes }}</sup>
       <div v-show="item.progress" class="margin-left:auto">｜{{ item.progress }}%</div>
     </h2>
     <hr class="my:.5em border-bottom:.08em|solid">
-    <label
-      v-for="(task, id) of item.tasks"
-      class="position:relative py:.25em flex align-items-center"
-      :class="{
-        'cursor:pointer': task.editable,
-        'pointer-events:none': !task.editable,
-        'color:darkgray text-decoration:line-through': task.completed,
-      }"
-      @click.prevent="completeTask(item, id);"
-    >
-      <span
-        v-show="task.completed"
-        class="position:absolute left:0.05em top:.4em w:.5em h:.5em rotate(-45deg) flex align-items:center font:120%"
-      >⌙</span>
-      <input type="checkbox"
-        :name="task.task" :value="task.completed"
-        class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid border-color:dimgray@light border-color:whitesmoke@dark r:.1em"
+    <div v-show="item.open">
+      <label
+        v-for="(task, taskId) of item.tasks"
+        class="position:relative py:.25em flex align-items-center"
         :class="{
           'cursor:pointer': task.editable,
           'pointer-events:none': !task.editable,
-          'border-color:darkgray@light': task.completed
+          'color:darkgray text-decoration:line-through': task.completed,
         }"
+        @click.prevent="completeTask(item, taskId);"
       >
-      <span class="w:95% flex">{{ id + 1 }}.&nbsp;
-        <div>{{ task.task }}</div>
-      </span>
-    </label>
+        <span
+          v-show="task.completed"
+          class="position:absolute left:0.05em top:.4em w:.5em h:.5em rotate(-45deg) flex align-items:center font:120%"
+        >⌙</span>
+        <input
+          type="checkbox" :name="task.task" :value="task.completed"
+          class="appearance:none margin-right:.3em translateY(.15em) w:1em h:1em border:.125em|solid border-color:dimgray@light border-color:whitesmoke@dark r:.1em"
+          :class="{
+            'cursor:pointer': task.editable,
+            'pointer-events:none': !task.editable,
+            'border-color:darkgray@light': task.completed
+          }"
+        >
+        <span class="w:95% flex">{{ taskId + 1 }}.&nbsp;
+          <div>{{ task.task }}</div>
+        </span>
+      </label>
+    </div>
   </section>
 </body>
 </html>

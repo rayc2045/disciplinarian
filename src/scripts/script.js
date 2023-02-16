@@ -1,13 +1,22 @@
 import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
-import example from './esm/example.js';
+import todo from './esm/todo.js';
+/*
+todo = [
+  {
+    title: '',
+    tasks: [ '...', '...', '...', ]
+  },
+]
+*/
 
-const items = reactive(example);
+const items = reactive(todo);
 /*
 items = [
   {
     title: '...',
+    open: false,
     completeTimes: 0,
     progress: 0,
     tasks: [
@@ -21,9 +30,11 @@ items = [
 
 const App = {
   init() {
+    const { open } = utils.getQueryParams();
     for (const item of items) {
+      item.open = typeof open !== 'undefined';
       item.completeTimes = 0;
-      item.tasks = item.tasks.split('；').map(task => ({
+      item.tasks = item.tasks.map(task => ({
         task,
         completed: false,
         editable: false,
@@ -31,18 +42,14 @@ const App = {
     }
   },
   update() {
-    if (typeof items[0].tasks === 'string') return;
+    if (typeof items[0].tasks[0] === 'string') return;
     for (const item of items) {
-      item.progress = utils.getPercentage(
-        item.tasks.filter(task => task.completed).length,
-        item.tasks.length
-      );
-
       const completedTasksNum = item.tasks.filter(
         task => task.completed
       ).length;
       const lastCompleteId = completedTasksNum - 1;
-
+      item.progress = utils.getPercentage(completedTasksNum, item.tasks.length);
+      // set editable
       for (const task of item.tasks) task.editable = false;
       if (lastCompleteId < 0) item.tasks[0].editable = true;
       else {
@@ -53,17 +60,14 @@ const App = {
       }
     }
   },
-  completeTask(item, id) {
-    if (item.tasks[id].editable)
-      item.tasks[id].completed = !item.tasks[id].completed;
-
+  completeTask(item, taskId) {
+    const task = item.tasks[taskId];
+    if (task.editable) task.completed = !task.completed;
     if (item.tasks.every(task => task.completed)) {
-      item.tasks.at(-1).editable = false;
       this.confetti(3);
       setTimeout(() => {
         item.completeTimes++;
         for (const task of item.tasks) task.completed = false;
-        item.tasks[0].editable = true;
       }, 3000);
     }
   },
