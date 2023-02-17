@@ -27,7 +27,7 @@
   <section v-for="item of items" class="w:85vw w:20em@xs">
     <h2 class="flex align-items:center cursor:pointer" @click="item.open = !item.open">
       <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span>
-      <span :class="{ '{w:6em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@<=390px': item.progress }">
+      <span :class="{ '{w:40vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@<=390px': item.progress }">
         {{ item.title }}
       </span>
       <sup v-show="item.completeTimes" class="ml:.3em">{{ item.completeTimes }}</sup>
