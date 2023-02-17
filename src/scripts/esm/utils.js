@@ -4,7 +4,7 @@ export default {
     const urlSearchParams = new URLSearchParams(urlSearch);
     return Object.fromEntries(urlSearchParams.entries());
   },
-  getPercentage(num1, num2) {
+  getProgress(num1, num2) {
     return Math.floor((num1 / num2) * 100);
   },
   isVisible(el) {

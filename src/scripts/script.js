@@ -2,7 +2,7 @@ import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
 
-import localStorage from './esm/localStorage.js';
+import storage from './esm/localStorage.js';
 const STORAGE_KEY = 'discipline-todo';
 
 const param = utils.getQueryParams(); // 'open', 'autoclose', 'autosave'
@@ -10,7 +10,7 @@ const items = reactive([]);
 
 const App = {
   async init() {
-    const store = localStorage.fetch(STORAGE_KEY);
+    const store = storage.fetch(STORAGE_KEY);
     if (param.hasOwnProperty('autosave') && store.length) {
       store.forEach(item => items.push(item));
       if (param.hasOwnProperty('autoclose'))
@@ -19,7 +19,7 @@ const App = {
         items.forEach(item => (item.open = true));
       return;
     }
-    localStorage.delete(STORAGE_KEY);
+    storage.delete(STORAGE_KEY);
 
     const txt = await fetch('/data/todo.txt').then(res => res.text());
     txt.split('\n\n').forEach((paragraph, idx) => {
@@ -53,7 +53,7 @@ const App = {
         task => task.completed
       ).length;
       const lastCompleteId = completedTasksNum - 1;
-      item.progress = utils.getPercentage(completedTasksNum, item.tasks.length);
+      item.progress = utils.getProgress(completedTasksNum, item.tasks.length);
       // set editable
       for (const task of item.tasks) task.editable = false;
       if (lastCompleteId < 0) item.tasks[0].editable = true;
@@ -64,8 +64,7 @@ const App = {
         if (item.tasks.at(-1).completed) item.tasks.at(-1).editable = false;
       }
       // set localStorage
-      if (param.hasOwnProperty('autosave'))
-        localStorage.save(STORAGE_KEY, items);
+      if (param.hasOwnProperty('autosave')) storage.save(STORAGE_KEY, items);
     }
   },
   completeTask(item, taskId) {
