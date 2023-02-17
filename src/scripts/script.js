@@ -5,20 +5,27 @@ import utils from './esm/utils.js';
 import storage from './esm/localStorage.js';
 const STORAGE_KEY = 'discipline-todo';
 
-const param = utils.getQueryParams(); // 'open', 'autoclose', 'autosave'
+const param = utils.getQueryParams();
 const items = reactive([]);
 
 const App = {
+  isSave: param.hasOwnProperty('autosave'),
+  isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
   async init() {
     const store = storage.fetch(STORAGE_KEY);
-    if (param.hasOwnProperty('autosave') && store.length) {
-      store.forEach(item => items.push(item));
-      if (param.hasOwnProperty('autoclose'))
-        return items.forEach(item => (item.open = false));
-      if (param.hasOwnProperty('open'))
-        items.forEach(item => (item.open = true));
+    if (this.isSave && store.length) {
+      for (const storeItem of store) {
+        storeItem.open = this.isOpen;
+        if (storeItem.tasks.every(task => task.completed)) {
+          storeItem.completeTimes++;
+          storeItem.progress = 0;
+          for (const task of storeItem.tasks) task.completed = false;
+        }
+        items.push(storeItem);
+      }
       return;
     }
+
     storage.delete(STORAGE_KEY);
 
     const txt = await fetch('/data/todo.txt').then(res => res.text());
@@ -34,7 +41,7 @@ const App = {
       // init items
       items[idx] = {
         title: data.title,
-        open: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
+        open: this.isOpen,
         completeTimes: 0,
         progress: 0,
         descriptions: data.descriptions,
@@ -48,11 +55,11 @@ const App = {
   },
   update() {
     for (const item of items) {
-      // set progress
       const completedTasksNum = item.tasks.filter(
         task => task.completed
       ).length;
       const lastCompleteId = completedTasksNum - 1;
+      // set progress
       item.progress = utils.getProgress(completedTasksNum, item.tasks.length);
       // set editable
       for (const task of item.tasks) task.editable = false;
@@ -61,15 +68,16 @@ const App = {
         item.tasks[lastCompleteId].editable = true;
         if (completedTasksNum < item.tasks.length)
           item.tasks[lastCompleteId + 1].editable = true;
-        if (item.tasks.at(-1).completed) item.tasks.at(-1).editable = false;
+        else item.tasks.at(-1).editable = false;
       }
-      // set localStorage
-      if (param.hasOwnProperty('autosave')) storage.save(STORAGE_KEY, items);
     }
   },
   completeTask(item, taskId) {
     const task = item.tasks[taskId];
-    if (task.editable) task.completed = !task.completed;
+    if (task.editable) {
+      task.completed = !task.completed;
+      if (this.isSave) storage.save(STORAGE_KEY, items);
+    }
     if (item.tasks.every(task => task.completed)) {
       item.tasks.at(-1).editable = false;
       this.confetti(3);
