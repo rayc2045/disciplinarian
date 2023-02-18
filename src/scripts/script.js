@@ -28,12 +28,13 @@ const App = {
       if (query.isSave) storage.save(STORAGE_KEY, items);
       return;
     }
-
     storage.delete(STORAGE_KEY);
-
+    await this.parseTxt();
+  },
+  async parseTxt() {
     const txt = await fetch('/data/todo.txt').then(res => res.text());
-    txt.split('\n\n').forEach((paragraph, idx) => {
-      // parse txt
+
+    for (const paragraph of txt.split('\n\n')) {
       const data = { title: '', descriptions: [], tasks: [] };
       paragraph.split('\n').forEach((line, lineIdx) => {
         if (lineIdx === 0) return (data.title = line);
@@ -41,8 +42,8 @@ const App = {
           return data.descriptions.push(line.replace('- ', ''));
         data.tasks.push(line);
       });
-      // init items
-      items[idx] = {
+
+      items.push({
         title: data.title,
         open: query.isOpen,
         completeTimes: 0,
@@ -53,8 +54,8 @@ const App = {
           completed: false,
           editable: false,
         })),
-      };
-    });
+      });
+    }
   },
   update() {
     for (const item of items) {
