@@ -22,7 +22,7 @@ const App = {
         if (query.isOpen) storeItem.open = true;
         if (query.isClose) storeItem.open = false;
         if (storeItem.tasks.every(task => task.completed))
-          this.resetItem(storeItem);
+          this.reset(storeItem);
         items.push(storeItem);
       }
       if (query.isSave) storage.save(STORAGE_KEY, items);
@@ -35,8 +35,8 @@ const App = {
     const txt = await fetch('/data/todo.txt').then(res => res.text());
 
     for (const paragraph of txt.split('\n\n')) {
-      const data = { title: '', descriptions: [], tasks: [] };
       if (paragraph.startsWith('//')) continue;
+      const data = { title: '', descriptions: [], tasks: [] };
       paragraph.split('\n').forEach((line, lineIdx) => {
         if (lineIdx === 0) return (data.title = line);
         if (line.startsWith('-'))
@@ -50,55 +50,48 @@ const App = {
         completeTimes: 0,
         progress: 0,
         descriptions: data.descriptions,
-        tasks: data.tasks.map(task => ({
+        tasks: data.tasks.map((task, taskIdx) => ({
           task,
           completed: false,
-          editable: false,
+          editable: taskIdx === 0,
         })),
       });
     }
   },
-  update() {
-    for (const item of items) {
-      const completedTasksNum = item.tasks.filter(
-        task => task.completed
-      ).length;
-      const lastCompleteId = completedTasksNum - 1;
-      // set progress
-      item.progress = utils.getProgress(completedTasksNum, item.tasks.length);
-      // set editable
-      for (const task of item.tasks) task.editable = false;
-      if (lastCompleteId < 0) item.tasks[0].editable = true;
-      else {
-        item.tasks[lastCompleteId].editable = true;
-        if (completedTasksNum < item.tasks.length)
-          item.tasks[lastCompleteId + 1].editable = true;
-        else item.tasks.at(-1).editable = false;
-      }
-    }
-  },
-  toggleOpen(item) {
-    item.open = !item.open;
+  toggleOpen(item, open = !item.open) {
+    item.open = open;
     if (query.isSave) storage.save(STORAGE_KEY, items);
   },
   toggleCompleted(item, taskId) {
     const task = item.tasks[taskId];
     if (task.editable) {
       task.completed = !task.completed;
-      if (query.isSave) storage.save(STORAGE_KEY, items);
+      this.update(item);
     }
     if (item.tasks.every(task => task.completed)) {
-      item.tasks.at(-1).editable = false;
       this.confetti(3);
-      setTimeout(() => {
-        this.resetItem(item);
-        item.tasks[0].editable = true;
-      }, 3000);
+      setTimeout(() => this.reset(item), 3000);
     }
   },
-  resetItem(item) {
+  update(item) {
+    // update 'progress' and 'editable'
+    const completedTasksNum = item.tasks.filter(task => task.completed).length;
+    const lastCompleteId = completedTasksNum - 1;
+    item.progress = utils.getProgress(completedTasksNum, item.tasks.length);
+    for (const task of item.tasks) task.editable = false;
+    if (completedTasksNum === 0) item.tasks[0].editable = true;
+    else {
+      item.tasks[lastCompleteId].editable = true;
+      if (completedTasksNum < item.tasks.length)
+        item.tasks[lastCompleteId + 1].editable = true;
+      else item.tasks.at(-1).editable = false;
+    }
+    if (query.isSave) storage.save(STORAGE_KEY, items);
+  },
+  reset(item) {
     item.completeTimes++;
     for (const task of item.tasks) task.completed = false;
+    this.update(item);
   },
   confetti(times = 0) {
     confetti();
@@ -112,10 +105,7 @@ if (query.isClose) {
   window.onscroll = () => {
     const sectionEls = Array.from(document.querySelectorAll('section'));
     sectionEls.forEach((sectionEl, idx) => {
-      if (!utils.isVisible(sectionEl)) {
-        items[idx].open = false;
-        if (query.isSave) storage.save(STORAGE_KEY, items);
-      }
+      if (!utils.isVisible(sectionEl)) App.toggleOpen(items[idx], false);
     });
   };
 }
