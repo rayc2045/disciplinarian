@@ -6,23 +6,26 @@ import storage from './esm/localStorage.js';
 const STORAGE_KEY = 'discipline-todo';
 
 const param = utils.getQueryParams();
+const query = {
+  isSave: param.hasOwnProperty('autosave'),
+  isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
+  isClose: param.hasOwnProperty('autoclose'),
+};
+
 const items = reactive([]);
 
 const App = {
-  isSave: param.hasOwnProperty('autosave'),
-  isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
   async init() {
     const store = storage.fetch(STORAGE_KEY);
-    if (this.isSave && store.length) {
+    if (query.isSave && store.length) {
       for (const storeItem of store) {
-        storeItem.open = this.isOpen;
-        if (storeItem.tasks.every(task => task.completed)) {
-          storeItem.completeTimes++;
-          storeItem.progress = 0;
-          for (const task of storeItem.tasks) task.completed = false;
-        }
+        if (query.isOpen) storeItem.open = true;
+        if (query.isClose) storeItem.open = false;
+        if (storeItem.tasks.every(task => task.completed))
+          this.resetItem(storeItem);
         items.push(storeItem);
       }
+      if (query.isSave) storage.save(STORAGE_KEY, items);
       return;
     }
 
@@ -41,7 +44,7 @@ const App = {
       // init items
       items[idx] = {
         title: data.title,
-        open: this.isOpen,
+        open: query.isOpen,
         completeTimes: 0,
         progress: 0,
         descriptions: data.descriptions,
@@ -72,21 +75,28 @@ const App = {
       }
     }
   },
-  completeTask(item, taskId) {
+  toggleOpen(item) {
+    item.open = !item.open;
+    if (query.isSave) storage.save(STORAGE_KEY, items);
+  },
+  toggleCompleted(item, taskId) {
     const task = item.tasks[taskId];
     if (task.editable) {
       task.completed = !task.completed;
-      if (this.isSave) storage.save(STORAGE_KEY, items);
+      if (query.isSave) storage.save(STORAGE_KEY, items);
     }
     if (item.tasks.every(task => task.completed)) {
       item.tasks.at(-1).editable = false;
       this.confetti(3);
       setTimeout(() => {
-        item.completeTimes++;
-        for (const task of item.tasks) task.completed = false;
+        this.resetItem(item);
         item.tasks[0].editable = true;
       }, 3000);
     }
+  },
+  resetItem(item) {
+    item.completeTimes++;
+    for (const task of item.tasks) task.completed = false;
   },
   confetti(times = 0) {
     confetti();
@@ -96,11 +106,14 @@ const App = {
 
 createApp({ ...App, items }).mount();
 
-if (param.hasOwnProperty('autoclose')) {
+if (query.isClose) {
   window.onscroll = () => {
     const sectionEls = Array.from(document.querySelectorAll('section'));
     sectionEls.forEach((sectionEl, idx) => {
-      if (!utils.isVisible(sectionEl)) items[idx].open = false;
+      if (!utils.isVisible(sectionEl)) {
+        items[idx].open = false;
+        if (query.isSave) storage.save(STORAGE_KEY, items);
+      }
     });
   };
 }

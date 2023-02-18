@@ -25,7 +25,7 @@
   @contextmenu.prevent="$event.target.click()"
 >
   <section v-for="item of items" class="w:85vw w:20em@xs">
-    <h2 class="flex align-items:center cursor:pointer" @click="item.open = !item.open">
+    <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span>
       <span
         class="white-space:nowrap overflow:hidden text-overflow:ellipsis"
@@ -59,7 +59,7 @@
           'cursor:pointer': task.editable,
           'pointer-events:none': !task.editable
         }"
-        @click.prevent="completeTask(item, taskId);"
+        @click.prevent="toggleCompleted(item, taskId);"
       >
         <span
           v-show="task.completed"
