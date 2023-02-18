@@ -36,6 +36,7 @@ const App = {
 
     for (const paragraph of txt.split('\n\n')) {
       const data = { title: '', descriptions: [], tasks: [] };
+      if (paragraph.startsWith('//')) continue;
       paragraph.split('\n').forEach((line, lineIdx) => {
         if (lineIdx === 0) return (data.title = line);
         if (line.startsWith('-'))
