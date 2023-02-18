@@ -39,7 +39,7 @@ const App = {
       const data = { title: '', descriptions: [], tasks: [] };
       paragraph.split('\n').forEach((line, lineIdx) => {
         if (lineIdx === 0) return (data.title = line);
-        if (line.startsWith('-'))
+        if (line.startsWith('- '))
           return data.descriptions.push(line.replace('- ', ''));
         data.tasks.push(line);
       });
