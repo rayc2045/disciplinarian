@@ -103,6 +103,8 @@ const App = {
 
 createApp({ ...App, items, style }).mount();
 
+window.onload = () => document.querySelector('#loader').remove();
+
 if (query.isClose) {
   window.onscroll = () => {
     const sectionEls = Array.from(document.querySelectorAll('section'));
