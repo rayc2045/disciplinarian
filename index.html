@@ -62,9 +62,9 @@
       >
         <input
           type="checkbox" :name="task.task" :value="task.completed"
-          class="position:relative mr:.3em mt:.15em w:1em h:1em accent-color:gray appearance:none border:.125em|solid r:.1em"
+          class="position:relative mr:.3em mt:.15em w:1em h:1em accent-color:gray appearance:none border:.125em|solid r:.1em outline:.1em|solid|steelblue:focus"
           :class="[
-            `{content:'⌙' position:absolute w:100% h:100% translate(-.1em,-.15em)|rotate(-45deg)|scale(1.2) flex justify-content:center align-items:center ${task.completed ? 'color:white' : 'color:transparent'}}:before`.replaceAll(' ', ';'), {
+            style.group(`content:'⌙' position:absolute w:100% h:100% translate(-.1em,-.15em)|rotate(-45deg)|scale(1.2) flex justify-content:center align-items:center ${task.completed ? 'color:white' : 'color:transparent'}`, ':before'), {
             'border-color:darkgray bg:darkgray': task.completed,
             'border-color:dimgray': !task.completed,
           }]"

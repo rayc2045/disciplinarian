@@ -1,6 +1,7 @@
 import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
+import style from './esm/style.js';
 
 import storage from './esm/localStorage.js';
 const STORAGE_KEY = 'discipline-todo';
@@ -98,7 +99,7 @@ const App = {
   },
 };
 
-createApp({ ...App, items }).mount();
+createApp({ ...App, items, style }).mount();
 
 if (query.isClose) {
   window.onscroll = () => {
