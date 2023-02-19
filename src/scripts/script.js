@@ -17,8 +17,13 @@ const items = reactive([]);
 
 const App = {
   async init() {
+    if (!query.isSave) {
+      await this.parseTxt();
+      return storage.delete(STORAGE_KEY);
+    }
     const store = storage.fetch(STORAGE_KEY);
-    if (query.isSave && store.length) {
+    if (!store.length) await this.parseTxt();
+    else {
       for (const storeItem of store) {
         if (query.isOpen) storeItem.open = true;
         if (query.isClose) storeItem.open = false;
@@ -26,11 +31,8 @@ const App = {
           this.reset(storeItem);
         items.push(storeItem);
       }
-      if (query.isSave) storage.save(STORAGE_KEY, items);
-      return;
     }
-    storage.delete(STORAGE_KEY);
-    await this.parseTxt();
+    storage.save(STORAGE_KEY, items);
   },
   async parseTxt() {
     const txt = await fetch('/data/todo.txt').then(res => res.text());
