@@ -16,7 +16,6 @@ const query = {
 const items = reactive([]);
 
 const App = {
-  isLoading: true,
   async init() {
     const store = storage.fetch(STORAGE_KEY);
     if (query.isSave && store.length) {
@@ -32,7 +31,6 @@ const App = {
     }
     storage.delete(STORAGE_KEY);
     await this.parseTxt();
-    this.isLoading = false;
   },
   async parseTxt() {
     const txt = await fetch('/data/todo.txt').then(res => res.text());
@@ -103,7 +101,10 @@ const App = {
 
 createApp({ ...App, items, style }).mount();
 
-window.onload = () => document.querySelector('#loader').remove();
+window.onload = () => {
+  document.body.removeAttribute('style');
+  document.querySelector('#loader').remove();
+};
 
 if (query.isClose) {
   window.onscroll = () => {
