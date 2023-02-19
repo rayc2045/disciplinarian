@@ -52,7 +52,7 @@
       <hr v-if="item.descriptions.length" class="my:.5em border-bottom:.08em|outset">
       <label
         v-for="(task, taskId) of item.tasks"
-        class="position:relative py:.25em flex align-items-center letter-spacing:.01em"
+        class="py:.25em flex align-items-center letter-spacing:.01em"
         :class="{
           'color:darkgray text:line-through': task.completed,
           'cursor:pointer': task.editable,
@@ -60,19 +60,15 @@
         }"
         @click.prevent="toggleCompleted(item, taskId);"
       >
-        <span
-          v-show="task.completed"
-          class="position:absolute left:0.05em top:.4em w:.5em h:.5em rotate(-45deg) flex align-items:center font:120% color:white"
-        >⌙</span>
         <input
           type="checkbox" :name="task.task" :value="task.completed"
-          class="appearance:none mr:.3em translateY(.15em) w:1em h:1em border:.125em|solid r:.1em z:-1"
-          :class="{
+          class="position:relative mr:.3em mt:.15em w:1em h:1em accent-color:gray appearance:none border:.125em|solid r:.1em"
+          :class="[
+            `{content:'⌙' position:absolute w:100% h:100% translate(-.1em,-.15em)|rotate(-45deg)|scale(1.2) flex justify-content:center align-items:center ${task.completed ? 'color:white' : 'color:transparent'}}:before`.replaceAll(' ', ';'), {
             'border-color:darkgray bg:darkgray': task.completed,
             'border-color:dimgray': !task.completed,
-            'cursor:pointer': task.editable,
-            'pointer-events:none': !task.editable
-          }"
+          }]"
+          v-effect="task.completed ? $el.setAttribute('checked', true) : $el.removeAttribute('checked');"
         >
         <span class="w:95% flex">{{ taskId + 1 }}.&nbsp;
           <div>{{ task.task }}</div>

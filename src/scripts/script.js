@@ -64,10 +64,9 @@ const App = {
   },
   toggleCompleted(item, taskId) {
     const task = item.tasks[taskId];
-    if (task.editable) {
-      task.completed = !task.completed;
-      this.update(item);
-    }
+    if (!task.editable) return;
+    task.completed = !task.completed;
+    this.update(item);
     if (item.tasks.every(task => task.completed)) {
       this.confetti(3);
       setTimeout(() => this.reset(item), 3000);
