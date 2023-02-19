@@ -18,13 +18,12 @@
   <script src="./src/scripts/script.js" type="module"></script>
 </head>
 <body
-  v-cloak
   class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font:1.2em font:1vw@3xl bg:seashell@light color:whitesmoke@dark bg:#222@dark user-select:none"
   :class="{ 'overflow:hidden pointer-events:none': isLoading }"
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
 >
-  <section v-for="item of items" class="w:85vw w:20em@xs">
+  <section v-cloak v-for="item of items" class="w:85vw w:20em@xs">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span>
       <span
@@ -77,9 +76,15 @@
       </label>
     </div>
   </section>
-  <div
+
+  <div 
     v-if="isLoading"
-    class="position:fixed left:0 top:0 w:100vw h:100vh grid place-content:center font-family:Tahoma font:bold font:2rem bg:white"
+    style="
+      position: fixed; left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      display: grid; place-content: center;
+      font-family: Tahoma; font-weight: bold; font-size: 2rem;
+      background-color: white;"
   >
     Loading...
   </div>
