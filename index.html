@@ -23,12 +23,15 @@
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
 >
-  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs ">
+  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <!-- <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span> -->
-      <span class="w:1.2em h:1.2em ml:-.4em text:center ~transform|.2s@motion" :class="{
-        'translate(.25em,.125em)|rotate(90deg)': item.open
-      }">▸</span>
+      <span class="ml:-.2em mt:.2em ~transform|.2s@motion" :class="{ 'scale(1.35)|rotate(90deg)': item.open, 'scale(1.35)': !item.open }">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="#222">
+          <path d="M10 17l5-5-5-5v10z"/>
+          <path d="M0 24V0h24v24H0z" fill="none"/>
+        </svg>
+      </span>
       <span
         class="white-space:nowrap overflow:hidden text-overflow:ellipsis"
         :class="{
