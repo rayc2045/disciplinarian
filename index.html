@@ -62,7 +62,7 @@
       <hr v-if="item.descriptions.length" class="my:.5em border-bottom:.08em|outset">
       <label
         v-for="(task, taskId) of item.tasks"
-        class="py:.25em flex align-items-center letter-spacing:.01em ~color|.2s@motion"
+        class="py:.25em flex align-items:start letter-spacing:.01em ~color|.2s@motion"
         :class="{
           'color:darkgray text:line-through': task.completed,
           'cursor:pointer': task.editable,
