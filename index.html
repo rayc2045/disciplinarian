@@ -92,7 +92,8 @@
             "/>
           </svg>
         </span>
-        <span class="w:95% flex">{{ taskId + 1 }}.&nbsp;
+        <span class="w:95% flex">
+          {{ query.isOrdered ? `${taskId + 1}.&nbsp;` : ''}}
           <div>{{ task.task }}</div>
         </span>
       </label>

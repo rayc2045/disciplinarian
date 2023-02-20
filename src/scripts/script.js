@@ -12,6 +12,7 @@ const query = {
   isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
   isClose: param.hasOwnProperty('autoclose'),
   isOutlined: param.hasOwnProperty('outlined') && !param.hasOwnProperty('filled'),
+  isOrdered: !param.hasOwnProperty('unordered'),
 };
 
 const items = reactive([]);
