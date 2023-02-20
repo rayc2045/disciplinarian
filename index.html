@@ -26,8 +26,8 @@
   <section v-for="item of items" v-cloak class="w:85vw w:20em@xs ">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <!-- <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span> -->
-      <span class="w:.8em ~transform|.2s@motion" :class="{
-        'translate(.04em,.25em)|rotate(90deg)': item.open
+      <span class="w:1.2em h:1.2em ml:-.4em text:center ~transform|.2s@motion" :class="{
+        'translate(.25em,.125em)|rotate(90deg)': item.open
       }">▸</span>
       <span
         class="white-space:nowrap overflow:hidden text-overflow:ellipsis"
