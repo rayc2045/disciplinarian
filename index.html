@@ -18,14 +18,17 @@
   <script src="./src/scripts/script.js" type="module"></script>
 </head>
 <body
-  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font:1.2em font:1vw@3xl bg:seashell@light color:whitesmoke@dark bg:#222@dark user-select:none"
-  style="overflow: hidden; pointer-events: none"
+  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font:1.2em font:1vw@3xl bg:whitesmoke@light color:whitesmoke@dark bg:#222@dark user-select:none"
+  style="overflow: hidden; pointer-events: none;"
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
 >
-  <section v-cloak v-for="item of items" class="w:85vw w:20em@xs">
+  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs ">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
-      <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span>
+      <!-- <span class="w:.8em">{{ item.open ? '▾' : '▸' }}</span> -->
+      <span class="w:.8em ~transform|.2s@motion" :class="{
+        'translate(.04em,.25em)|rotate(90deg)': item.open
+      }">▸</span>
       <span
         class="white-space:nowrap overflow:hidden text-overflow:ellipsis"
         :class="{
@@ -35,8 +38,10 @@
       >
         {{ item.title }}
       </span>
-      <sup v-show="item.completeTimes" class="ml:.3em">{{ item.completeTimes }}</sup>
-      <div v-show="item.progress" class="ml:auto content:'｜':before content:'%':after">{{ item.progress }}</div>
+      <sup class="ml:.3em ~opacity|.2s@motion" :class="{ 'opacity:0': !item.completeTimes }">
+        {{ item.completeTimes }}
+      </sup>
+      <span v-show="item.progress" class="ml:auto">｜{{ item.progress }}%</span>
     </h2>
     <hr class="my:.5em border-bottom:.08em|solid">
     <div v-show="item.open">
@@ -52,7 +57,7 @@
       <hr v-if="item.descriptions.length" class="my:.5em border-bottom:.08em|outset">
       <label
         v-for="(task, taskId) of item.tasks"
-        class="py:.25em flex align-items-center letter-spacing:.01em"
+        class="py:.25em flex align-items-center letter-spacing:.01em ~color|.2s@motion"
         :class="{
           'color:darkgray text:line-through': task.completed,
           'cursor:pointer': task.editable,
@@ -62,9 +67,9 @@
       >
         <input
           type="checkbox" :name="task.task" :value="task.completed"
-          class="position:relative mr:.3em mt:.15em w:1em h:1em accent-color:gray appearance:none border:.125em|solid r:.1em outline:.1em|solid|steelblue:focus"
+          class="position:relative mr:.3em mt:.15em w:1em h:1em accent-color:gray appearance:none border:.125em|solid r:.1em outline:.1em|solid|steelblue:focus ~background-color|.1s@motion"
           :class="[
-            style.group(`content:'⌙' position:absolute w:100% h:100% translate(-.1em,-.15em)|rotate(-45deg)|scale(1.2) flex justify-content:center align-items:center ${task.completed ? 'color:white' : 'color:transparent'}`, ':before'), {
+            style.group(`content:'⌙' position:absolute w:100% h:100% translate(-.1em,-.15em)|rotate(-45deg)|scale(1.2) flex justify-content:center align-items:center color:${task.completed ? 'white' : 'transparent'}`, ':before'), {
             'border-color:darkgray bg:darkgray': task.completed,
             'border-color:dimgray': !task.completed,
           }]"
@@ -84,7 +89,7 @@
       width: 100vw; height: 100vh;
       display: grid; place-content: center;
       font-family: Tahoma; font-weight: bold; font-size: 2rem;
-      background-color: white;"
+      background-color: whitesmoke;"
   >
     Loading...
   </div>
