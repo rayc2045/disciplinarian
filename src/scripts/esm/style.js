@@ -1,5 +1,5 @@
 export default {
   group(style, to) {
-    return `{${style}}${to}`.replaceAll(' ', ';');
+    return `{${style}}${to}`.replaceAll('\n', ' ').replaceAll(' ', ';');
   },
 };
