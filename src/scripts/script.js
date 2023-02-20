@@ -11,6 +11,7 @@ const query = {
   isSave: param.hasOwnProperty('autosave'),
   isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
   isClose: param.hasOwnProperty('autoclose'),
+  isOutlined: param.hasOwnProperty('outlined') && !param.hasOwnProperty('filled'),
 };
 
 const items = reactive([]);
@@ -101,7 +102,7 @@ const App = {
   },
 };
 
-createApp({ ...App, items, style }).mount();
+createApp({ ...App, items, query, style }).mount();
 
 window.onload = () => {
   document.body.removeAttribute('style');
