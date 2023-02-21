@@ -23,6 +23,10 @@
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
 >
+  <strong v-if="query.file === 'example' || errorMessage" class="font:1.2em color:steelblue">
+    ({{ errorMessage || '未指定檔案' }}，顯示範例)
+  </strong>
+
   <section v-for="item of items" v-cloak class="w:85vw w:20em@xs">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <span class="ml:-.2em ~transform|.2s@motion" :class="{
