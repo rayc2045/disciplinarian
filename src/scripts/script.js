@@ -22,8 +22,10 @@ const App = {
       for (const storeItem of store) {
         if (query.isOpen) storeItem.open = true;
         if (query.isClose) storeItem.open = false;
-        if (query.isCycle && storeItem.tasks.every(task => task.completed))
-          this.reset(storeItem);
+        if (storeItem.tasks.every(task => task.completed))
+          query.isCycle
+            ? this.reset(storeItem)
+            : (storeItem.tasks.at(-1).editable = true);
         if (!query.isCycle) storeItem.completeTimes = 0;
         items.push(storeItem);
       }
@@ -80,12 +82,12 @@ const App = {
     try {
       res = await fetch(txtPath);
     } catch (error) {
-      this.errorMessage = '檔案抓取失敗';
       res = await fetch(`${root}/example.txt`);
+      this.errorMessage = '檔案抓取失敗';
     }
     if (!res.ok) {
-      this.errorMessage = '找不到檔案';
       res = await fetch(`${root}/example.txt`);
+      this.errorMessage = '找不到檔案';
     }
     return await res.text();
   },
@@ -100,8 +102,10 @@ const App = {
     this.update(item);
     if (item.tasks.every(task => task.completed)) {
       this.confetti(3);
-      if (query.isCycle) setTimeout(() => this.reset(item), 3000);
-      else setTimeout(() => (item.tasks.at(-1).editable = true), 3000);
+      setTimeout(() => {
+        if (query.isCycle) return this.reset(item);
+        item.tasks.at(-1).editable = true;
+      }, 3000);
     }
   },
   update(item) {
