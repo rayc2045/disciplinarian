@@ -2,18 +2,10 @@ import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
 import style from './esm/style.js';
+import query from './esm/query.js';
 
 import storage from './esm/localStorage.js';
 const STORAGE_KEY = 'discipline-todo';
-
-const param = utils.getQueryParams();
-const query = {
-  isSave: param.hasOwnProperty('autosave'),
-  isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
-  isClose: param.hasOwnProperty('autoclose'),
-  isOutlined: param.hasOwnProperty('outlined') && !param.hasOwnProperty('filled'),
-  isOrdered: !param.hasOwnProperty('unordered'),
-};
 
 const items = reactive([]);
 
