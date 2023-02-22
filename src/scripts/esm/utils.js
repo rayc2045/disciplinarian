@@ -4,6 +4,9 @@ export default {
     const urlSearchParams = new URLSearchParams(urlSearch);
     return Object.fromEntries(urlSearchParams.entries());
   },
+  capitalizeFirstLetter(str) {
+    return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+  },
   getProgress(num1, num2) {
     return Math.floor((num1 / num2) * 100);
   },

@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="./src/assets/icon_robot.png" type="image/png">
-  <title>Disciplinarian</title>
+  <title>TXT Todo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -35,9 +35,14 @@
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
 >
-  <strong v-if="query.file === 'example' || errorMessage" class="font:1.2em color:steelblue">
-    ({{ errorMessage || '未指定檔案' }}，顯示範例)
-  </strong>
+  <h1
+    v-cloak
+    class="w:85vw w:16.66em@xs word-break:break-all font:1.2em"
+    :class="`${prefer.darkMode ? 'color:lightsteelblue' : 'color:steelblue'}`"
+  >
+    <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
+    <div class="font:monospace font:1.2em">{{ filePath }}</div>
+  </h1>
 
   <section v-for="item of items" v-cloak class="w:85vw w:20em@xs">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
@@ -66,7 +71,7 @@
       </sup>
       <span v-show="item.progress" class="ml:auto">｜{{ item.progress }}%</span>
     </h2>
-    <hr class="my:.5em border-bottom:.08em|solid">
+    <hr class="my:.5em border-bottom:.07em|solid">
     <div v-show="item.open">
       <ul v-if="item.descriptions.length" class="mt:1em mb:.75em letter-spacing:.01em">
         <strong class="mb:.5em block">注意事項：</strong>
@@ -77,7 +82,7 @@
           {{ description }}
         </li>
       </ul>
-      <hr v-if="item.descriptions.length" class="my:.5em border-bottom:.08em|outset">
+      <hr v-if="item.descriptions.length" class="my:.5em border-bottom:.07em|outset">
       <label
         v-for="(task, taskId) of item.tasks"
         class="py:.25em flex align-items:start letter-spacing:.01em ~color|.2s@motion"
@@ -118,7 +123,7 @@
         </span>
         <span class="w:95% flex">
           {{ query.isOrdered ? `${taskId + 1}.&nbsp;` : ''}}
-          <div>{{ task.task }}</div>
+          <div class="word-break:break-all">{{ task.task }}</div>
         </span>
       </label>
     </div>

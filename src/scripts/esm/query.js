@@ -2,7 +2,7 @@ import utils from './utils.js';
 const param = utils.getQueryParams();
 
 export default {
-  file: param.file || 'example',
+  file: param.file,
   isSave: param.hasOwnProperty('autosave'),
   isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
   isClose: param.hasOwnProperty('autoclose'),
