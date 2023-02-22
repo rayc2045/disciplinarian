@@ -78,16 +78,18 @@
     </h2>
     <hr class="my:.5em border-bottom:.07em|solid">
     <div v-show="item.open">
-      <ul v-if="item.descriptions.length" class="mt:1em mb:.75em letter-spacing:.01em">
-        <strong class="mb:.5em block">注意事項：</strong>
-        <li
-          v-for="description of item.descriptions"
-          class="my:.25em ml:1.4em list-style:circle"
-        >
-          {{ description }}
-        </li>
-      </ul>
-      <hr v-if="item.descriptions.length" class="my:.5em border-bottom:.07em|outset">
+      <div v-if="item.descriptions.length">
+        <ul class="mt:1em mb:.75em letter-spacing:.01em">
+          <strong class="mb:.5em block">注意事項：</strong>
+          <li
+            v-for="description of item.descriptions"
+            class="my:.25em ml:1.4em list-style:circle"
+          >
+            {{ description }}
+          </li>
+        </ul>
+        <hr class="my:.5em border-bottom:.07em|outset">
+      </div>
       <label
         v-for="(task, taskId) of item.tasks"
         class="py:.25em flex align-items:start letter-spacing:.01em ~color|.2s@motion"
@@ -152,7 +154,7 @@
       }
     }
   </style>
-  <div 
+  <div
     id="loader"
     style="
       position: fixed; left: 0; top: 0; z-index: 1;
