@@ -9,16 +9,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Noto Sans TC', Arial, sans-serif; }
-    [v-cloak] { display: none; }
-  </style>
   <link href="https://cdn.master.co/normal.css" rel="stylesheet">
+  <style>
+    [v-cloak] { display: none; }
+    body {
+      font-family: 'Noto Sans TC', Arial, sans-serif;
+      color: #222;
+      background-color: whitesmoke;
+    }
+    @media screen and (prefers-color-scheme: dark) {
+      body {
+        color: whitesmoke;
+        background-color: #222;
+      }
+    }
+  </style>
   <script src="https://cdn.master.co/css"></script>
   <script src="./src/scripts/script.js" type="module"></script>
 </head>
 <body
-  class="grid place-content:center gap:2em px:1.5em py:2em min-height:100vh font:1.2em font:1vw@3xl bg:whitesmoke@light color:whitesmoke@dark bg:#222@dark user-select:none"
+  class="
+    grid place-content:center gap:2em px:1.5em py:2em min-height:100vh
+    font:1.2em font:1vw@3xl user-select:none"
   style="overflow: hidden; pointer-events: none;"
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
@@ -33,7 +45,10 @@
         'translateY(.1em)|scale(1.35)|rotate(90deg)': item.open,
         'translateY(.1em)|scale(1.35)': !item.open
       }">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="#222">
+        <svg
+          xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+          :fill="`${prefer.darkMode ? 'whitesmoke' : '#222'}`"
+        >
           <path d="M10 17l5-5-5-5v10z"/>
         </svg>
       </span>
@@ -84,7 +99,12 @@
         <span class="mr:.3em translateY(.15em)|scale(1.3)">
           <svg
             xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
-            :fill="task.completed ? 'darkgray' : 'dimgray'"
+            :fill="
+              task.completed && prefer.darkMode
+                ? 'lightgray' :
+              task.completed
+                ? 'gray'
+                : 'dimgray'"
             class="~fill|.2s@motion"
           >
             <path :d="
@@ -104,16 +124,39 @@
     </div>
   </section>
 
+  <style>
+    #loader {
+      color: #222;
+      background-color: whitesmoke;
+    }
+    @media screen and (prefers-color-scheme: dark) {
+      #loader {
+        color: whitesmoke;
+        background-color: #222;
+      }
+    }
+  </style>
   <div 
     id="loader"
     style="
       position: fixed; left: 0; top: 0;
       width: 100vw; height: 100vh;
       display: grid; place-content: center;
-      font-family: Tahoma; font-weight: bold; font-size: 2rem;
-      background-color: whitesmoke;"
+      font-family: Tahoma; font-weight: bold; font-size: 1.75em;"
   >
-    Loading...
+    <style>
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    </style>
+    <div style="
+      width: 1em; height: 1em; margin-inline: auto;
+      border-width: .15em; border-radius: 50%;
+      border-right-color: transparent;
+      animation: spin 1s linear infinite;
+    "></div>
+    <!-- <div style="margin-top: .5em;">Loading...</div> -->
   </div>
 </body>
 </html>

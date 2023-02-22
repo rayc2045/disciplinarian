@@ -2,6 +2,7 @@ import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
 import style from './esm/style.js';
+import prefer from './esm/prefer.js';
 import query from './esm/query.js';
 import storage from './esm/localStorage.js';
 
@@ -134,7 +135,7 @@ const App = {
   },
 };
 
-createApp({ ...App, items, query, style }).mount();
+createApp({ ...App, items, style, prefer, query }).mount();
 
 window.onload = () => {
   document.body.removeAttribute('style');
