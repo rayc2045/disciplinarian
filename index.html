@@ -29,22 +29,27 @@
 </head>
 <body
   class="
-    grid place-content:center gap:2em px:1.5em py:2em min-height:100vh
+    grid place-content:center pb:1.25em min-height:100vh
     font:1.2em font:1vw@3xl user-select:none"
   style="overflow: hidden; pointer-events: none;"
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
 >
-  <h1
+  <header
     v-cloak
-    class="w:85vw w:16.66em@xs word-break:break-all font:1.2em"
-    :class="`${prefer.darkMode ? 'color:lightsteelblue' : 'color:steelblue'}`"
+    class="sticky top:0 pt:2.5em pb:1.5em z:1"
+    :class="`${prefer.darkMode ? 'bg:#111' : 'bg:whitesmoke'}`"
   >
-    <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
-    <div class="font:monospace font:1.2em">{{ filePath }}</div>
-  </h1>
+    <h1
+      class="w:85vw w:16.66em@xs word-break:break-all font:1.2em"
+      :class="`${prefer.darkMode ? 'color:lightsteelblue' : 'color:steelblue'}`"
+    >
+      <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
+      <div class="font:monospace font:1.2em">{{ filePath }}</div>
+    </h1>
+  </header>
 
-  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs">
+  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs my:1em">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <span class="ml:-.2em ~transform|.2s@motion" :class="{
         'translateY(.1em)|scale(1.35)|rotate(90deg)': item.open,
@@ -130,6 +135,10 @@
   </section>
 
   <style>
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
     #loader {
       color: #111;
       background-color: whitesmoke;
@@ -149,12 +158,6 @@
       display: grid; place-content: center;
       font-family: Tahoma; font-weight: bold; font-size: 1.75em;"
   >
-    <style>
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-    </style>
     <div style="
       width: 1em; height: 1em; margin-inline: auto;
       border-width: .15em; border-radius: 50%;
