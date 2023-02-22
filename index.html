@@ -128,7 +128,7 @@
         </span>
         <span class="w:95% flex">
           <span v-if="query.isOrdered">{{ taskId + 1 }}.</span>
-          <div class="ml:.25em word-break:break-all">{{ task.task }}</div>
+          <div class="ml:.15em word-break:break-all">{{ task.task }}</div>
         </span>
       </label>
     </div>
@@ -153,7 +153,7 @@
   <div 
     id="loader"
     style="
-      position: fixed; left: 0; top: 0;
+      position: fixed; left: 0; top: 0; z-index: 1;
       width: 100vw; height: 100vh;
       display: grid; place-content: center;
       font-family: Tahoma; font-weight: bold; font-size: 1.75em;"
