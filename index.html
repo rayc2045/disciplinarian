@@ -127,8 +127,10 @@
           </svg>
         </span>
         <span class="w:95% flex">
-          <span v-if="query.isOrdered">{{ taskId + 1 }}.</span>
-          <div class="ml:.15em word-break:break-all">{{ task.task }}</div>
+          <span v-if="query.isOrdered">{{ taskId + 1 }}.&nbsp;</span>
+          <div class="word-break:break-all" :class="{ 'ml:.15em': !query.isOrdered }">
+            {{ task.task }}
+          </div>
         </span>
       </label>
     </div>
