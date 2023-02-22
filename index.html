@@ -14,13 +14,13 @@
     [v-cloak] { display: none; }
     body {
       font-family: 'Noto Sans TC', Arial, sans-serif;
-      color: #222;
+      color: #111;
       background-color: whitesmoke;
     }
     @media screen and (prefers-color-scheme: dark) {
       body {
-        color: whitesmoke;
-        background-color: #222;
+        color: #eee;
+        background-color: #111;
       }
     }
   </style>
@@ -47,7 +47,7 @@
       }">
         <svg
           xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
-          :fill="`${prefer.darkMode ? 'whitesmoke' : '#222'}`"
+          :fill="`${prefer.darkMode ? '#eee' : '#111'}`"
         >
           <path d="M10 17l5-5-5-5v10z"/>
         </svg>
@@ -126,13 +126,13 @@
 
   <style>
     #loader {
-      color: #222;
+      color: #111;
       background-color: whitesmoke;
     }
     @media screen and (prefers-color-scheme: dark) {
       #loader {
-        color: whitesmoke;
-        background-color: #222;
+        color: #eee;
+        background-color: #111;
       }
     }
   </style>
