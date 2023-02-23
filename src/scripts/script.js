@@ -6,21 +6,27 @@ import prefer from './esm/prefer.js';
 import query from './esm/query.js';
 import storage from './esm/localStorage.js';
 
-const STORAGE_KEY = `txt-todo-${query.file || 'example'}`;
+const ROOT = '/public/txt';
+const exampleFile = `${ROOT}/example.txt`;
+const fetchFile = query.file
+  ? utils.formatFilePath(ROOT, query.file, 'txt')
+  : exampleFile;
+
+const STORAGE_KEY = `txt-todo${fetchFile}`;
 const store = storage.fetch(STORAGE_KEY);
 
 const items = reactive([]);
 
 const App = {
   promptMessage: '',
-  filePath: store.filePath,
+  filePath: store.filePath || '',
   async init() {
     if (!query.isSave) {
-      await this.parseTxt(query.file);
+      await this.parseTxt();
       this.updateSiteTitle();
       return storage.delete(STORAGE_KEY);
     }
-    if (!store.items?.length) await this.parseTxt(query.file);
+    if (!store.items?.length) await this.parseTxt();
     else {
       for (const storeItem of store.items) {
         if (query.isOpen) storeItem.open = true;
@@ -36,13 +42,27 @@ const App = {
     this.updateSiteTitle();
     this.save();
   },
-  async parseTxt(path) {
-    const txt = await this.fetchTxt(path);
+  async parseTxt() {
+    const res = await utils.fetchText(fetchFile, exampleFile);
+    if (!query.file) this.promptMessage = '未指定檔案';
+    else if (res.status === 'Blocked') this.promptMessage = '檔案讀取失敗';
+    else if (res.status === 'Not found') this.promptMessage = '找不到檔案';
 
-    for (const paragraph of txt.split('\n\n')) {
+    this.filePath = res.file;
+
+    const content =
+      res.text.trim() ||
+      `
+      沒有顯示內容？
+      檢查 ${fetchFile} 檔案
+      參考 ${exampleFile} 檔案，加入待辦事項
+      開啟新視窗，以當前不帶有「autosave」查詢字串的網址載入網頁
+      如果想開啟自動儲存功能，在網址中加入「autosave」查詢字串再重新載入
+    `;
+
+    for (const paragraph of content.split('\n\n')) {
       if (!paragraph.trim() || paragraph.startsWith('//')) continue;
       const data = { title: '', descriptions: [], tasks: [] };
-
       paragraph
         .split('\n')
         .filter(p => p.trim())
@@ -52,7 +72,6 @@ const App = {
             return data.descriptions.push(line.replace('- ', ''));
           data.tasks.push(line);
         });
-
       items.push({
         title: data.title,
         open: query.isOpen,
@@ -66,57 +85,6 @@ const App = {
         })),
       });
     }
-  },
-  async fetchTxt(path) {
-    const root = '/public/txt';
-    const examplePath = `${root}/example.txt`;
-
-    let res;
-    let txtPath = path ? this.formatPath(root, path) : examplePath;
-    try {
-      res = await fetch(txtPath);
-      if (!query.file) this.promptMessage = '未指定檔案';
-    } catch (error) {
-      // blocked
-      txtPath = examplePath;
-      res = await fetch(txtPath);
-      this.promptMessage = '檔案抓取失敗';
-    }
-    // not found
-    if (!res.ok) {
-      txtPath = examplePath;
-      res = await fetch(txtPath);
-      this.promptMessage = '找不到檔案';
-    }
-
-    this.filePath = `~${txtPath.replace(root, '')}`;
-
-    const text = await res.text();
-    return text.trim()
-      ? text
-      : `
-        沒有顯示內容？
-        檢查 ${txtPath} 檔案
-        參考 ${examplePath} 檔案，加入待辦事項
-        開啟新視窗，以當前不帶有「autosave」查詢字串的網址載入網頁
-        如果想開啟自動儲存功能，在網址中加入「autosave」查詢字串再重新載入
-    `;
-  },
-  formatPath(root, path) {
-    if (path.startsWith('http'))
-      return path.split(' ').join('+').replace('+', '?').replaceAll('+', '&');
-
-    let txtPath = '';
-    if (!path.startsWith(root) || !path.startsWith(root.replace('/', '')))
-      txtPath += root;
-    if (!path.startsWith('/')) txtPath += '/';
-    txtPath += path;
-    if (!txtPath.endsWith('.txt')) txtPath += '.txt';
-    return '/' + txtPath
-      .split('/')
-      .filter(split => split.trim())
-      .join('/')
-      .replace(root.repeat(2), root);
   },
   updateSiteTitle() {
     document.title = this.filePath
@@ -176,7 +144,7 @@ const App = {
   },
 };
 
-createApp({ ...App, items, style, prefer, query }).mount();
+createApp({ ...App, items, style, prefer, query, ROOT }).mount();
 
 window.onload = () => {
   document.body.removeAttribute('style');

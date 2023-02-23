@@ -4,6 +4,44 @@ export default {
     const urlSearchParams = new URLSearchParams(urlSearch);
     return Object.fromEntries(urlSearchParams.entries());
   },
+  formatFilePath(root, path, type) {
+    if (path.startsWith('http'))
+      return path.split(' ').join('+').replace('+', '?').replaceAll('+', '&');
+
+    let newPath = '';
+    if (!path.startsWith(root) || !path.startsWith(root.replace('/', '')))
+      newPath += root;
+    if (!path.startsWith('/')) newPath += '/';
+    newPath += path;
+    if (!newPath.endsWith(`.${type}`)) newPath += `.${type}`;
+
+    return `/${newPath
+      .replace(root.repeat(2), root)
+      .split('/')
+      .filter(split => split.length)
+      .join('/')}`;
+  },
+  async fetchText(file, defaultFile) {
+    let res;
+    let status = 'Ok';
+    try {
+      res = await fetch(file);
+    } catch (error) {
+      status = 'Blocked';
+      file = defaultFile;
+      res = await fetch(file);
+    }
+    if (!res.ok) {
+      status = 'Not found';
+      file = defaultFile;
+      res = await fetch(file);
+    }
+    return {
+      status,
+      file,
+      text: await res.text(),
+    };
+  },
   capitalizeFirstLetter(str) {
     return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
   },

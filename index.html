@@ -45,7 +45,7 @@
       :class="`${prefer.darkMode ? 'color:lightsteelblue' : 'color:steelblue'}`"
     >
       <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
-      <div class="font:monospace font:1.2em">{{ filePath }}</div>
+      <div v-if="filePath" class="font:monospace font:1.2em">~{{ filePath.replace(ROOT, '') }}</div>
     </h1>
   </header>
 
