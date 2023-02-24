@@ -30,7 +30,7 @@
 <body
   class="
     grid place-content:center pb:1.25em min-height:100vh
-    font:1.2em font:1vw@3xl user-select:none"
+    font:1.2em font:1vw@3xl line-height:1.25 user-select:none"
   style="overflow: hidden; pointer-events: none;"
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
@@ -41,7 +41,7 @@
     :class="`${prefer.darkMode ? 'bg:#111' : 'bg:whitesmoke'}`"
   >
     <h1
-      class="w:85vw w:16.66em@xs word-break:break-all font:1.2em"
+      class="w:85vw w:17.5em@xs word-break:break-all font:1.2em"
       :class="`${prefer.darkMode ? 'color:lightsteelblue' : 'color:steelblue'}`"
     >
       <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
@@ -49,7 +49,7 @@
     </h1>
   </header>
 
-  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs my:1em">
+  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs my:1.5em">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <span class="ml:-.2em ~transform|.2s@motion" :class="{
         'translateY(.1em)|scale(1.35)|rotate(90deg)': item.open,
@@ -76,18 +76,20 @@
       </sup>
       <span v-show="item.progress" class="ml:auto">｜{{ item.progress }}%</span>
     </h2>
-    <hr class="my:.5em border-bottom:.07em|solid">
     <div v-show="item.open">
-      <div v-if="item.descriptions.length">
-        <ul class="mt:1em mb:.75em letter-spacing:.01em">
-          <strong class="mb:.5em block">注意事項：</strong>
-          <li
-            v-for="description of item.descriptions"
-            class="my:.25em ml:1.4em list-style:circle"
-          >
-            {{ description }}
-          </li>
-        </ul>
+      <hr class="my:.5em border-bottom:.07em|solid">
+      <div v-if="item.descriptions.length" class="letter-spacing:.01em text:justify">
+        <p
+          v-for="description of item.descriptions"
+          class="position:relative my:.75em pl:1.4em"
+          :class="[
+            style.group(`
+              content:'“' position:absolute left:-.5em font:1.5em
+            `, ':before'),
+          ]"
+        >
+          {{ description }}
+        </p>
         <hr class="my:.5em border-bottom:.07em|outset">
       </div>
       <label

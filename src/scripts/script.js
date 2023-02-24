@@ -67,10 +67,11 @@ const App = {
         .split('\n')
         .filter(p => p.trim())
         .forEach((line, lineIdx) => {
+          line = line.trim();
           if (lineIdx === 0) return (data.title = line);
-          if (line.startsWith('- '))
-            return data.descriptions.push(line.replace('- ', ''));
-          data.tasks.push(line);
+          if (line.startsWith('-'))
+            return data.tasks.push(line.replace('-', '').trim());
+          data.descriptions.push(line);
         });
       items.push({
         title: data.title,
