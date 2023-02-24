@@ -37,15 +37,15 @@
 >
   <header
     v-cloak
-    class="sticky top:0 pt:2.5em pb:1.5em z:1"
+    class="sticky top:0 pt:2.5em pb:1.5em w:85vw w:20em@xs z:1"
     :class="`${prefer.darkMode ? 'bg:#111' : 'bg:whitesmoke'}`"
   >
     <h1
-      class="w:85vw w:17.5em@xs word-break:break-all font:1.2em"
+      class="word-break:break-all font:1.2em"
       :class="`${prefer.darkMode ? 'color:lightsteelblue' : 'color:steelblue'}`"
     >
       <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
-      <div v-if="filePath" class="font:monospace font:1.2em">~{{ filePath.replace(ROOT, '') }}</div>
+      <div class="font:monospace font:1.2em">~{{ filePath.replace(ROOT, '') }}</div>
     </h1>
   </header>
 

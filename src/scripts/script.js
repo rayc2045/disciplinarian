@@ -19,7 +19,7 @@ const items = reactive([]);
 
 const App = {
   promptMessage: '',
-  filePath: store.filePath || '',
+  filePath: store.filePath || fetchFile,
   async init() {
     if (!query.isSave) {
       await this.parseTxt();
