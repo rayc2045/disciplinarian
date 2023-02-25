@@ -132,6 +132,12 @@
     </div>
   </section>
 
+  <div
+    v-if="!query.isCycle"
+    class="fixed top:0 h:.2em pointer-events:none z:1 ~width|.3s"
+    :class="`w:${totalProgress}% ${prefer.darkMode ? 'bg:lightsteelblue' : 'bg:steelblue'}`"
+  ></div>
+
   <style>
     @keyframes spin {
       from { transform: rotate(0deg); }

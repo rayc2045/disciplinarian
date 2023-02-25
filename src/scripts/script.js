@@ -23,9 +23,11 @@ const items = reactive([]);
 const App = {
   promptMessage: '',
   filePath: store.filePath || fetchFile,
+  totalProgress: 0,
   async init() {
     if (!query.isSave) {
       await this.parseTxt();
+      if (!query.isCycle) this.updateTotalProgress();
       this.updateSiteTitle();
       return storage.delete(STORAGE_KEY);
     }
@@ -42,6 +44,7 @@ const App = {
         items.push(storeItem);
       }
     }
+    if (!query.isCycle) this.updateTotalProgress();
     this.updateSiteTitle();
     this.save();
   },
@@ -102,6 +105,7 @@ const App = {
     if (!task.editable) return;
     task.completed = !task.completed;
     this.update(item);
+    if (!query.isCycle) this.updateTotalProgress();
     if (item.tasks.every(task => task.completed)) {
       this.confetti(3);
       setTimeout(() => {
@@ -109,6 +113,17 @@ const App = {
         item.tasks.at(-1).editable = true;
       }, 3000);
     }
+  },
+  updateTotalProgress() {
+    let completedNum = 0;
+    let total = 0;
+    for (const item of items) {
+      for (const task of item.tasks) {
+        if (task.completed) completedNum++;
+        total++;
+      }
+    }
+    this.totalProgress = utils.getProgress(completedNum, total);
   },
   update(item) {
     // update 'progress' and 'editable'
