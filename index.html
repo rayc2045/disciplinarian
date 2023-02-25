@@ -159,11 +159,17 @@
     #loader {
       color: #111;
       background-color: whitesmoke;
+      font-size: 2.5rem;
     }
     @media screen and (prefers-color-scheme: dark) {
       #loader {
         color: #eee;
         background-color: #111;
+      }
+    }
+    @media screen and (width >= 1920px) {
+      #loader {
+        font-size: 2vw;
       }
     }
   </style>
@@ -173,7 +179,7 @@
       position: fixed; left: 0; top: 0; z-index: 1;
       width: 100vw; height: 100vh;
       display: grid; place-content: center;
-      font-family: Tahoma; font-weight: bold; font-size: 1.75em;"
+      font-family: Tahoma; font-weight: bold;"
   >
     <div style="
       width: 1em; height: 1em; margin-inline: auto;
@@ -181,7 +187,6 @@
       border-right-color: transparent;
       animation: spin 1s linear infinite;
     "></div>
-    <!-- <div style="margin-top: .5em;">Loading...</div> -->
   </div>
 </body>
 </html>
