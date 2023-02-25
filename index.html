@@ -78,10 +78,10 @@
     </h2>
     <div v-show="item.open">
       <hr class="my:.5em border-bottom:.07em|solid">
-      <div v-if="item.descriptions.length">
-        <div class="pb:.25em grid gap:.5em letter-spacing:.01em text:justify">
-          <p v-for="description of item.descriptions">{{ description }}</p>
-        </div>
+      <div v-if="item.descriptions.length" class="letter-spacing:.01em text:justify">
+        <p v-for="description of item.descriptions" class="my:.75em font-size:.95em">
+          {{ description }}
+        </p>
         <hr class="my:.5em border-bottom:.07em|outset">
       </div>
       <label
