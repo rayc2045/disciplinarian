@@ -13,7 +13,9 @@ const fetchFile = query.file
   ? utils.formatFilePath(ROOT, query.file, 'txt')
   : exampleFile;
 
-const STORAGE_KEY = `txt-todo${fetchFile}`;
+const STORAGE_KEY = `txt-todo${
+  fetchFile.startsWith('http') ? '-' : ''
+}${fetchFile}`;
 const store = storage.fetch(STORAGE_KEY);
 
 const items = reactive([]);
