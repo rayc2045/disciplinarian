@@ -147,11 +147,17 @@ window.onload = () => {
   document.querySelector('#loader').remove();
 };
 
-if (query.isClose) {
-  window.onscroll = () => {
-    const sectionEls = Array.from(document.querySelectorAll('section'));
-    sectionEls.forEach((sectionEl, idx) => {
-      if (!utils.isVisible(sectionEl)) App.toggleOpen(items[idx], false);
-    });
-  };
-}
+let oldScrollY = window.scrollY;
+
+window.onscroll = () => {
+  const headerEl = document.querySelector('header');
+  if (oldScrollY < window.scrollY) headerEl.style.top = '-6em';
+  else headerEl.style.top = '0';
+  oldScrollY = window.scrollY;
+
+  if (!query.isClose) return;
+  const sectionEls = Array.from(document.querySelectorAll('section'));
+  sectionEls.forEach((sectionEl, idx) => {
+    if (!utils.isVisible(sectionEl)) App.toggleOpen(items[idx], false);
+  });
+};
