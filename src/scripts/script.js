@@ -89,13 +89,7 @@ const App = {
     }
   },
   updateSiteTitle() {
-    document.title = this.filePath
-      .split('/')
-      .at(-1)
-      .split('_')
-      .map(str => utils.capitalizeFirstLetter(str))
-      .join(' ')
-      .replace('.txt', '');
+    document.title = utils.getUppercaseFileName(this.filePath, 'txt');
   },
   toggleOpen(item, open = !item.open) {
     item.open = open;
@@ -146,7 +140,7 @@ const App = {
   },
 };
 
-createApp({ ...App, items, style, prefer, query, ROOT }).mount();
+createApp({ ...App, items, utils, style, prefer, query }).mount();
 
 window.onload = () => {
   document.body.removeAttribute('style');

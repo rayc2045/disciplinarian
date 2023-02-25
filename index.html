@@ -41,11 +41,11 @@
     :class="`${prefer.darkMode ? 'bg:#111' : 'bg:whitesmoke'}`"
   >
     <h1
-      class="word-break:break-all font:1.2em"
+      class="word-break:break-all font:1.5em"
       :class="`${prefer.darkMode ? 'color:lightsteelblue' : 'color:steelblue'}`"
     >
       <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
-      <div class="font:monospace font:1.2em">~{{ filePath.replace(ROOT, '') }}</div>
+      <div v-else>{{ utils.getUppercaseFileName(filePath, 'txt') }}</div>
     </h1>
   </header>
 
