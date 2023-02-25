@@ -1,3 +1,4 @@
+import 'https://esm.sh/@master/css';
 import { createApp, reactive } from 'https://esm.sh/petite-vue';
 import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
