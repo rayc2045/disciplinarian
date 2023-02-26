@@ -42,7 +42,15 @@
   >
     <h1
       class="word-break:break-all font:1.5em"
-      :class="`${prefer.darkMode ? 'color:#FFA500' : 'color:steelblue'}`"
+      :class="`${
+        prefer.darkMode && !query.isCycle && totalProgress > 50
+          ? 'color:yellowgreen' :
+        prefer.darkMode
+          ? 'color:#FFA500' :
+        !query.isCycle && totalProgress > 50
+          ? 'color:steelblue'
+          : 'color:indianred'
+        }`"
     >
       <div v-if="promptMessage" class="mb:.25em">{{ promptMessage }}，顯示範例</div>
       <div v-else>{{ utils.getUppercaseFileName(filePath, 'txt') }}</div>
@@ -80,7 +88,7 @@
       </sup>
       <span
         v-show="item.progress"
-        class="ml:auto"
+        class="ml:auto ~color|.2s@motion"
         :class="{
           'color:gray': !query.isCycle && item.progress === 100 && prefer.darkMode,
           'color:silver': !query.isCycle && item.progress === 100,
@@ -148,7 +156,15 @@
   <div
     v-if="!query.isCycle"
     class="fixed top:0 h:.2em pointer-events:none z:1 ~width|.3s"
-    :class="`w:${totalProgress}% ${prefer.darkMode ? 'bg:#FFA500' : 'bg:steelblue'}`"
+    :class="`w:${totalProgress}% ${
+      prefer.darkMode && !query.isCycle && totalProgress > 50
+        ? 'bg:yellowgreen' :
+      prefer.darkMode
+        ? 'bg:#FFA500' :
+      !query.isCycle && totalProgress > 50
+        ? 'bg:steelblue'
+        : 'bg:indianred'
+      }`"
   ></div>
 
   <style>
