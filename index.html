@@ -41,14 +41,14 @@
     :class="`${prefer.darkMode ? 'bg:#111' : 'bg:whitesmoke'}`"
   >
     <h1
-      class="word-break:break-all font:1.5em"
+      class="word-break:break-all font:1.75em"
       :class="`${
         prefer.darkMode && !query.isCycle && totalProgress > 50
           ? 'color:yellowgreen' :
         prefer.darkMode
           ? 'color:#FFA500' :
         !query.isCycle && totalProgress > 50
-          ? 'color:steelblue'
+          ? 'color:royalblue'
           : 'color:indianred'
         }`"
     >
@@ -162,7 +162,7 @@
       prefer.darkMode
         ? 'bg:#FFA500' :
       !query.isCycle && totalProgress > 50
-        ? 'bg:steelblue'
+        ? 'bg:royalblue'
         : 'bg:indianred'
       }`"
   ></div>
