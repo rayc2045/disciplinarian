@@ -156,7 +156,7 @@
   <div
     v-if="!query.isCycle"
     class="fixed top:0 h:.2em pointer-events:none z:1 ~width|.3s"
-    :class="`w:${totalProgress}% ${
+    :class="`w:${totalProgress}vw ${
       prefer.darkMode && !query.isCycle && totalProgress > 50
         ? 'bg:yellowgreen' :
       prefer.darkMode
