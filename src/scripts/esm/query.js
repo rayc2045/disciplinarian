@@ -9,4 +9,5 @@ export default {
   isCycle: param.hasOwnProperty('cycle'),
   isOutlined: param.hasOwnProperty('outlined') && !param.hasOwnProperty('filled'),
   isOrdered: !param.hasOwnProperty('unordered'),
+  isStrict: !param.hasOwnProperty('free'),
 };

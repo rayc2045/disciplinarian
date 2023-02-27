@@ -36,11 +36,19 @@ const App = {
       for (const storeItem of store.items) {
         if (query.isOpen) storeItem.open = true;
         if (query.isClose) storeItem.open = false;
-        if (storeItem.tasks.every(task => task.completed))
-          query.isCycle
-            ? this.reset(storeItem)
-            : (storeItem.tasks.at(-1).editable = true);
         if (!query.isCycle) storeItem.completeTimes = 0;
+        if (query.isStrict) {
+          let minCompleted = storeItem.tasks.findIndex(task => !task.completed);
+          if (minCompleted < 0) minCompleted = storeItem.tasks.length;
+          storeItem.tasks.forEach(
+            (task, idx) => (task.completed = idx < minCompleted)
+          );
+          this.update(storeItem);
+        } else for (const task of storeItem.tasks) task.editable = true;
+        if (storeItem.tasks.every(task => task.completed)) {
+          if (query.isCycle) this.reset(storeItem);
+          else if (query.isStrict) storeItem.tasks.at(-1).editable = true;
+        }
         items.push(storeItem);
       }
     }
@@ -88,7 +96,7 @@ const App = {
         tasks: data.tasks.map((task, taskIdx) => ({
           task,
           completed: false,
-          editable: taskIdx === 0,
+          editable: taskIdx === 0 || !query.isStrict,
         })),
       });
     }
@@ -106,11 +114,18 @@ const App = {
     task.completed = !task.completed;
     this.update(item);
     if (!query.isCycle) this.updateTotalProgress();
+
     if (item.tasks.every(task => task.completed)) {
+      for (const task of item.tasks) task.editable = false;
       this.confetti(3);
       setTimeout(() => {
-        if (query.isCycle) return this.reset(item);
-        item.tasks.at(-1).editable = true;
+        if (query.isCycle) {
+          if (!query.isStrict)
+            for (const task of item.tasks) task.editable = true;
+          return this.reset(item);
+        }
+        if (query.isStrict) return (item.tasks.at(-1).editable = true);
+        for (const task of item.tasks) task.editable = true;
       }, 3000);
     }
   },
@@ -126,17 +141,19 @@ const App = {
     this.totalProgress = utils.getProgress(completedNum, total);
   },
   update(item) {
-    // update 'progress' and 'editable'
+    // update progress
     const completedTasksNum = item.tasks.filter(task => task.completed).length;
-    const lastCompleteId = completedTasksNum - 1;
     item.progress = utils.getProgress(completedTasksNum, item.tasks.length);
-    for (const task of item.tasks) task.editable = false;
-    if (completedTasksNum === 0) item.tasks[0].editable = true;
-    else {
-      item.tasks[lastCompleteId].editable = true;
-      if (completedTasksNum < item.tasks.length)
-        item.tasks[lastCompleteId + 1].editable = true;
-      else item.tasks.at(-1).editable = false;
+    // update editable
+    if (query.isStrict) {
+      for (const task of item.tasks) task.editable = false;
+      if (!completedTasksNum) item.tasks[0].editable = true;
+      else {
+        const lastCompleteId = completedTasksNum - 1;
+        item.tasks[lastCompleteId].editable = true;
+        if (completedTasksNum < item.tasks.length)
+          item.tasks[lastCompleteId + 1].editable = true;
+      }
     }
     if (query.isSave) this.save();
   },
