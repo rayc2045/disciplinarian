@@ -26,6 +26,8 @@ export default {
     };
   },
   formatFilePath(root, path, type) {
+    if (path.startsWith('file://')) return path;
+
     if (path.startsWith('http'))
       return path.split(' ').join('+').replace('+', '?').replaceAll('+', '&');
 
