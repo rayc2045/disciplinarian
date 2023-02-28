@@ -37,17 +37,18 @@ const App = {
         if (query.isOpen) storeItem.open = true;
         if (query.isClose) storeItem.open = false;
         if (!query.isCycle) storeItem.completeTimes = 0;
-        if (query.isStrict) {
+        if (!query.isStrict)
+          for (const task of storeItem.tasks) task.editable = true;
+        if (storeItem.tasks.every(task => task.completed)) {
+          if (query.isCycle) this.reset(storeItem);
+          else if (query.isStrict) storeItem.tasks.at(-1).editable = true;
+        } else if (query.isStrict) {
           let minCompleted = storeItem.tasks.findIndex(task => !task.completed);
           if (minCompleted < 0) minCompleted = storeItem.tasks.length;
           storeItem.tasks.forEach(
             (task, idx) => (task.completed = idx < minCompleted)
           );
           this.update(storeItem);
-        } else for (const task of storeItem.tasks) task.editable = true;
-        if (storeItem.tasks.every(task => task.completed)) {
-          if (query.isCycle) this.reset(storeItem);
-          else if (query.isStrict) storeItem.tasks.at(-1).editable = true;
         }
         items.push(storeItem);
       }
