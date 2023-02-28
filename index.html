@@ -71,18 +71,18 @@
         </svg>
       </span>
       <span
-        class="white-space:nowrap overflow:hidden text-overflow:ellipsis"
-        :class="{
-          'max-width:calc(100%-6.25em)': item.progress,
-          'max-width:calc(100%-3em)': !item.progress
-        }"
+        class="max-width:100% white-space:nowrap overflow:hidden text-overflow:ellipsis"
+        :class="{ 'mr:.5em': !item.completeTimes && item.progress }"
       >
         {{ item.title }}
       </span>
       <sup
         v-if="query.isCycle"
         class="ml:.3em ~opacity|.2s@motion"
-        :class="{ 'opacity:0': !item.completeTimes }"
+        :class="{
+          'opacity:0': !item.completeTimes,
+          'mr:.5em': item.progress
+        }"
       >
         {{ item.completeTimes }}
       </sup>
