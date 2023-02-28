@@ -7,4 +7,5 @@ export default {
       .map(s => s.replaceAll('\n', ''))
       .join(';')}}${to}`;
   },
+  truncate: 'max-width:100% white-space:nowrap overflow:hidden text-overflow:ellipsis',
 };

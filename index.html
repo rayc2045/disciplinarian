@@ -70,10 +70,7 @@
           <path d="M10 17l5-5-5-5v10z"/>
         </svg>
       </span>
-      <span
-        class="max-width:100% white-space:nowrap overflow:hidden text-overflow:ellipsis"
-        :class="{ 'mr:.5em': !item.completeTimes && item.progress }"
-      >
+      <span :class="[style.truncate, { 'mr:.5em': !item.completeTimes && item.progress }]">
         {{ item.title }}
       </span>
       <sup
