@@ -52,8 +52,8 @@
           : 'color:indianred'
         }`"
     >
-      <span v-if="promptMessage">{{ promptMessage }}，顯示範例</span>
-      <span v-else>{{ utils.getUppercaseFileName(filePath, 'txt') }}</span>
+      <span v-if="promptMessage" class="font-size:.57em">({{ promptMessage }})<br></span>
+      <span>{{ utils.getUppercaseFileName(filePath, 'txt') }}</span>
     </h1>
   </header>
 

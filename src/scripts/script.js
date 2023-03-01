@@ -186,8 +186,8 @@ let oldScrollY = window.scrollY;
 
 window.onscroll = () => {
   const headerEl = document.querySelector('header');
-  if (oldScrollY < window.scrollY) headerEl.style.top = '-7em';
-  else headerEl.style.top = '0px';
+  if (oldScrollY < window.scrollY) headerEl.style.top = '-8.5em';
+  else if (!utils.isVisible(headerEl)) headerEl.style.top = '0px';
   oldScrollY = window.scrollY;
 
   if (!query.isClose) return;
