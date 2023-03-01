@@ -7,5 +7,6 @@ export default {
       .map(s => s.replaceAll('\n', ''))
       .join(';')}}${to}`;
   },
+  hidden: 'max-height:0px overflow:hidden',
   truncate: 'max-width:100% white-space:nowrap overflow:hidden text-overflow:ellipsis',
 };

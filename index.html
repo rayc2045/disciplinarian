@@ -95,7 +95,14 @@
         {{ item.progress }}%
       </span>
     </h2>
-    <div v-show="item.open">
+    <div
+      class="~transform|.2s@motion"
+      :class="`${
+        item.open
+          ? 'translateY(0)'
+          : `translateY(-.75em) ${style.hidden}`
+      }`"
+    >
       <hr class="my:.5em border-bottom:.07em|solid">
       <div v-if="item.descriptions.length" class="letter-spacing:.01em text:justify">
         <p v-for="description of item.descriptions" class="my:.75em font-size:.95em">
