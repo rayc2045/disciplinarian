@@ -75,8 +75,9 @@
       </span>
       <sup
         v-if="query.isCycle"
-        class="ml:.3em ~opacity|.2s@motion"
+        class="~opacity|.2s@motion"
         :class="{
+          'ml:.3em': item.completeTimes,
           'opacity:0': !item.completeTimes,
           'mr:.5em': item.progress
         }"
