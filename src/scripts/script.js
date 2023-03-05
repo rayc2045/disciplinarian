@@ -8,10 +8,10 @@ import query from './esm/query.js';
 import storage from './esm/localStorage.js';
 
 const ROOT = '/public/txt';
-const exampleFile = `${ROOT}/example.txt`;
+const tutorialFile = `${ROOT}/如何使用 TXT Todo.txt`;
 const fetchFile = query.file
   ? utils.formatFilePath(ROOT, query.file, 'txt')
-  : exampleFile;
+  : tutorialFile;
 
 const STORAGE_KEY = `txt-todo${
   fetchFile.startsWith('http') ? '-' : ''
@@ -37,18 +37,20 @@ const App = {
         if (query.isOpen) storeItem.open = true;
         if (query.isClose) storeItem.open = false;
         if (!query.isCycle) storeItem.completeTimes = 0;
-        if (!query.isStrict)
-          for (const task of storeItem.tasks) task.editable = true;
-        if (storeItem.tasks.every(task => task.completed)) {
-          if (query.isCycle) this.reset(storeItem);
-          else if (query.isStrict) storeItem.tasks.at(-1).editable = true;
-        } else if (query.isStrict) {
-          let minCompleted = storeItem.tasks.findIndex(task => !task.completed);
-          if (minCompleted < 0) minCompleted = storeItem.tasks.length;
-          storeItem.tasks.forEach(
-            (task, idx) => (task.completed = idx < minCompleted)
-          );
-          this.update(storeItem);
+        if (storeItem.tasks.length) {
+          if (!query.isStrict)
+            for (const task of storeItem.tasks) task.editable = true;
+          if (storeItem.tasks.every(task => task.completed)) {
+            if (query.isCycle) this.reset(storeItem);
+            else if (query.isStrict) storeItem.tasks.at(-1).editable = true;
+          } else if (query.isStrict) {
+            let minCompleted = storeItem.tasks.findIndex(task => !task.completed);
+            if (minCompleted < 0) minCompleted = storeItem.tasks.length;
+            storeItem.tasks.forEach(
+              (task, idx) => (task.completed = idx < minCompleted)
+            );
+            this.update(storeItem);
+          }
         }
         items.push(storeItem);
       }
@@ -58,7 +60,7 @@ const App = {
     this.save();
   },
   async parseTxt() {
-    const res = await utils.fetchText(fetchFile, exampleFile);
+    const res = await utils.fetchText(fetchFile, tutorialFile);
     if (!query.file) this.promptMessage = '未指定檔案';
     else if (res.status === 'Blocked') this.promptMessage = '檔案讀取失敗';
     else if (res.status === 'Not found') this.promptMessage = '找不到檔案';
@@ -69,10 +71,10 @@ const App = {
       res.text.trim() ||
       `
       沒有顯示內容？
-      檢查 ${fetchFile} 檔案
-      參考 ${exampleFile} 檔案，加入待辦事項
-      開啟新視窗，以當前不帶有「autosave」查詢字串的網址載入網頁
-      如果想開啟自動儲存功能，在網址中加入「autosave」查詢字串再重新載入
+      - 檢查 ${fetchFile} 檔案
+      - 參考 ${tutorialFile} 檔案，加入待辦事項
+      - 開啟新視窗，以當前不帶有「autosave」查詢字串的網址載入網頁
+      -如果想開啟自動儲存功能，在網址中加入「autosave」查詢字串再重新載入
     `;
 
     for (const paragraph of content.split('\n\n')) {
@@ -84,8 +86,11 @@ const App = {
         .forEach((line, lineIdx) => {
           line = line.trim();
           if (lineIdx === 0) return (data.title = line);
-          if (line.startsWith('-'))
-            return data.tasks.push(line.replace('-', '').trim());
+          if (line.startsWith('-')) {
+            const task = line.replace('-', '').trim();
+            if (task) data.tasks.push(task);
+            return;
+          }
           data.descriptions.push(line);
         });
       items.push({
