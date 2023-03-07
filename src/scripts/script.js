@@ -108,7 +108,7 @@ const App = {
     }
   },
   updateSiteTitle() {
-    document.title = utils.getUppercaseFileName(this.filePath, 'txt');
+    document.title = utils.getUppercaseFileName(this.filePath);
   },
   toggleOpen(item, open = !item.open) {
     item.open = open;

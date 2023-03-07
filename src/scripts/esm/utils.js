@@ -44,12 +44,12 @@ export default {
       .filter(split => split.length)
       .join('/')}`;
   },
-  getUppercaseFileName(path, type, split = '_') {
+  getUppercaseFileName(path, separator = '_') {
     return path
       .split('/')
       .at(-1)
-      .replace(`.${type}`, '')
-      .split(split)
+      .split('.')[0]
+      .split(separator)
       .map(str => this.capitalizeFirstLetter(str))
       .join(' ');
   },
