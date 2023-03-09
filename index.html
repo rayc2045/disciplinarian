@@ -38,7 +38,7 @@
 >
   <header
     v-cloak
-    class="sticky top:0 pt:2.5em pb:1.5em w:85vw w:20em@xs z:1 ~top|.5s"
+    class="sticky top:0 pt:2.5em pb:1.5em w:85vw max-width:30em z:1 ~top|.5s"
     :class="`${
       query.isDark
         ? style.darkTheme.split(' ')[1] :
@@ -74,7 +74,7 @@
     </h1>
   </header>
 
-  <section v-for="item of items" v-cloak class="w:85vw w:20em@xs my:1.5em">
+  <section v-for="item of items" v-cloak class="w:85vw max-width:30em my:1.5em">
     <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
       <span class="ml:-.2em ~transform|.2s@motion" :class="`${
         item.open
