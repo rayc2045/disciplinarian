@@ -45,11 +45,11 @@
       query.isDark || prefer.darkMode
         ? style.darkTheme.bg
         : style.lightTheme.bg
-      }`"
+    }`"
   >
     <h1
       class="word-break:break-all font:1.75em"
-      :class="`${
+      :class="[`${
         query.isLight && totalProgress > 50
           ? 'color:royalblue' :
         query.isLight
@@ -61,7 +61,9 @@
         totalProgress > 50
           ? 'color:royalblue'
           : 'color:indianred'
-        }`"
+      }`, {
+        'ml:1.15em@xs': query.is3D,
+      }]"
     >
       <span v-if="promptMessage" class="font-size:.57em">({{ promptMessage }})<br></span>
       <span>{{ utils.getUppercaseFileName(filePath) }}</span>
@@ -71,10 +73,28 @@
   <section
     v-for="item of items"
     v-cloak
-    class="w:85vw my:1.5em"
-    :class="`${style.group('min-width:20em w:auto max-width:26.5em', '@xs')}`"
+    class="w:85vw my:1.5em my:1.25em@xs"
+    :class="[`${style.group(`
+      min-width:20em w:auto max-width:26.5em
+      ${query.is3D ? `p:2em r:1em ${
+        query.isLight && item.open
+          ? style.lightTheme.neumorphism.pressed :
+        query.isLight
+          ? style.lightTheme.neumorphism.flat :
+        (query.isDark || prefer.darkMode) && item.open
+          ? style.darkTheme.neumorphism.pressed :
+        query.isDark || prefer.darkMode
+          ? style.darkTheme.neumorphism.flat :
+        item.open
+          ? style.lightTheme.neumorphism.pressed
+          : style.lightTheme.neumorphism.flat
+      }` : ''
+    }`, '@xs')}`, {
+      'cursor:pointer': !item.open,
+    }]"
+    @click="if (!item.open) toggleOpen(item);"
   >
-    <h2 class="flex align-items:center cursor:pointer" @click="toggleOpen(item)">
+    <h2 class="flex align-items:center cursor:pointer" @click.stop="toggleOpen(item);">
       <span class="ml:-.2em ~transform|.2s@motion" :class="`${
         item.open
           ? 'translateY(.1em)|scale(1.35)|rotate(90deg)'
@@ -113,12 +133,13 @@
         v-show="item.progress"
         class="ml:auto ~color|.2s@motion"
         :class="`${
-          query.isLight && item.progress === 100
+          item.progress === 100 ? `${
+          query.isLight
             ? 'color:silver' :
-          (query.isDark || prefer.darkMode) && item.progress === 100
-            ? 'color:gray' :
-          item.progress === 100
-            ? 'color:silver' : ''
+          (query.isDark || prefer.darkMode)
+            ? 'color:gray'
+            : 'color:silver'
+          }` : ''
         }`"
       >
         {{ item.progress }}%

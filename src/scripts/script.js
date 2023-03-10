@@ -74,7 +74,7 @@ const App = {
       - 檢查 ${fetchFile} 檔案
       - 參考 ${tutorialFile} 檔案，加入待辦事項
       - 開啟新視窗，以當前不帶有「autosave」查詢字串的網址載入網頁
-      -如果想開啟自動儲存功能，在網址中加入「autosave」查詢字串再重新載入
+      - 如果想開啟自動儲存功能，在網址中加入「autosave」查詢字串再重新載入
     `;
 
     for (const paragraph of content.split('\n\n')) {
@@ -193,7 +193,7 @@ window.onscroll = () => {
   const headerEl = document.querySelector('header');
   const headerHeight = headerEl.getBoundingClientRect().height;
   if (oldScrollY < window.scrollY) headerEl.style.top = `-${headerHeight}px`;
-  else if (!utils.isVisible(headerEl)) headerEl.style.top = '0px';
+  // else if (!utils.isVisible(headerEl)) headerEl.style.top = '0px';
   oldScrollY = window.scrollY;
 
   if (!query.isClose) return;

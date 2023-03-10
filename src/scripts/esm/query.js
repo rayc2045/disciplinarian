@@ -5,6 +5,7 @@ export default {
   file: param.file,
   isDark: param.hasOwnProperty('dark') && !param.hasOwnProperty('light'),
   isLight: param.hasOwnProperty('light') && !param.hasOwnProperty('dark'),
+  is3D: param.hasOwnProperty('3D') || param.hasOwnProperty('3d'),
   isSave: param.hasOwnProperty('autosave'),
   isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
   isClose: param.hasOwnProperty('autoclose'),
