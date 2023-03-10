@@ -25,10 +25,10 @@
     font:1.2em font:1vw@3xl line-height:1.25 user-select:none"
   :class="`${
     query.isLight
-      ? style.lightTheme :
+      ? `${style.lightTheme.color} ${style.lightTheme.bg}` :
     query.isDark || prefer.darkMode
-      ? style.darkTheme
-      : style.lightTheme
+      ? `${style.darkTheme.color} ${style.darkTheme.bg}`
+      : `${style.lightTheme.color} ${style.lightTheme.bg}`
   }`"
   style="overflow: hidden; pointer-events: none;"
   @vue:mounted="init()"
@@ -41,24 +41,24 @@
       style.group('min-width:20em w:auto max-width:26.5em', '@xs')
     } ${
       query.isLight
-        ? style.lightTheme.split(' ')[1] :
+        ? style.lightTheme.bg :
       query.isDark || prefer.darkMode
-        ? style.darkTheme.split(' ')[1]
-        : style.lightTheme.split(' ')[1]
+        ? style.darkTheme.bg
+        : style.lightTheme.bg
       }`"
   >
     <h1
       class="word-break:break-all font:1.75em"
       :class="`${
-        query.isLight && !query.isCycle && totalProgress > 50
+        query.isLight && totalProgress > 50
           ? 'color:royalblue' :
         query.isLight
           ? 'color:indianred' :
-        (query.isDark || prefer.darkMode) && !query.isCycle && totalProgress > 50
+        (query.isDark || prefer.darkMode) && totalProgress > 50
           ? 'color:yellowgreen' :
         query.isDark || prefer.darkMode
           ? 'color:#FFA500' :
-        !query.isCycle && totalProgress > 50
+        totalProgress > 50
           ? 'color:royalblue'
           : 'color:indianred'
         }`"
@@ -84,10 +84,10 @@
           xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
           :fill="`${
             query.isLight
-              ? style.lightTheme.split(' ')[0].replace('color:', '') :
+              ? style.lightTheme.color.replace('color:', '') :
             query.isDark || prefer.darkMode
-              ? style.darkTheme.split(' ')[0].replace('color:', '')
-              : style.lightTheme.split(' ')[0].replace('color:', '')
+              ? style.darkTheme.color.replace('color:', '')
+              : style.lightTheme.color.replace('color:', '')
           }`"
         >
           <path d="M10 17l5-5-5-5v10z"/>
@@ -113,11 +113,11 @@
         v-show="item.progress"
         class="ml:auto ~color|.2s@motion"
         :class="`${
-          query.isLight && !query.isCycle && item.progress === 100
+          query.isLight && item.progress === 100
             ? 'color:silver' :
-          (query.isDark || prefer.darkMode) && !query.isCycle && item.progress === 100
+          (query.isDark || prefer.darkMode) && item.progress === 100
             ? 'color:gray' :
-          !query.isCycle && item.progress === 100
+          item.progress === 100
             ? 'color:silver' : ''
         }`"
       >
@@ -199,15 +199,15 @@
     v-if="!query.isCycle"
     class="fixed top:0 h:.2em pointer-events:none z:1 ~width|.3s"
     :class="`w:${totalProgress}vw ${
-      query.isLight && !query.isCycle && totalProgress > 50
+      query.isLight && totalProgress > 50
         ? 'bg:royalblue' :
       query.isLight
         ? 'bg:indianred' :
-      (query.isDark || prefer.darkMode) && !query.isCycle && totalProgress > 50
+      (query.isDark || prefer.darkMode) && totalProgress > 50
         ? 'bg:yellowgreen' :
       query.isDark || prefer.darkMode
         ? 'bg:#FFA500' :
-      !query.isCycle && totalProgress > 50
+      totalProgress > 50
         ? 'bg:royalblue'
         : 'bg:indianred'
     }`"
