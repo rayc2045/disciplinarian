@@ -9,8 +9,9 @@ export default {
   isSave: param.hasOwnProperty('autosave'),
   isOpen: param.hasOwnProperty('open') && !param.hasOwnProperty('autoclose'),
   isClose: param.hasOwnProperty('autoclose'),
-  isCycle: param.hasOwnProperty('cycle'),
-  isOutlined: param.hasOwnProperty('outlined') && !param.hasOwnProperty('filled'),
+  isList: param.hasOwnProperty('list') && !param.hasOwnProperty('checkbox'),
   isOrdered: !param.hasOwnProperty('unordered'),
+  isOutlined: param.hasOwnProperty('outlined') && !param.hasOwnProperty('filled'),
   isStrict: !param.hasOwnProperty('free'),
+  isCycle: param.hasOwnProperty('cycle'),
 };
