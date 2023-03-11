@@ -164,7 +164,7 @@
       <ul v-if="query.isList">
         <li v-for="(task, taskId) of item.tasks" class="py:.25em flex align-items:start">
           <span v-if="query.isOrdered" class="ml:.15em">{{ taskId + 1 }}.&nbsp;</span>
-          <span v-else class="ml:.05em translateY(.2em)|scale(.5)">
+          <span v-else class="mr:.05em translateY(.2em)|scale(.5)">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" :fill="`${
               query.isLight
                 ? style.lightTheme.color.replace('color:', '') :
