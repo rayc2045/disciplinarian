@@ -161,38 +161,30 @@
         </p>
       </div>
       <hr v-if="item.descriptions.length && item.tasks.length" class="my:.5em border-bottom:.07em|outset">
-      <ul v-if="query.isList">
-        <li v-for="(task, taskId) of item.tasks" class="py:.25em flex align-items:start">
-          <span v-if="query.isOrdered" class="ml:.15em">{{ taskId + 1 }}.&nbsp;</span>
-          <span v-else class="mr:.05em translateY(.2em)|scale(.5)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" :fill="`${
-              query.isLight
-                ? style.lightTheme.color.replace('color:', '') :
-              query.isDark || prefer.darkMode
-                ? style.darkTheme.color.replace('color:', '')
-                : style.lightTheme.color.replace('color:', '')
-            }`">
-              <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z"/>
-            </svg>
-          </span>
-          <div class="word-break:break-all" :class="{ 'ml:.15em': !query.isOrdered }">
-            {{ task.task }}
-          </div>
-        </li>
-      </ul>
-      <div v-else>
-        <label
-          v-for="(task, taskId) of item.tasks"
-          class="py:.25em flex align-items:start letter-spacing:.01em ~color|.2s@motion"
-          :class="[
-            `${
-              task.editable
-                ? 'cursor:pointer'
-                : 'pointer-events:none'
-            }`, { 'color:darkgray grayscale(100%) text:line-through': task.completed }
-          ]"
-          @click.prevent="toggleCompleted(item, taskId);"
-        >
+      <label
+        v-for="(task, taskId) of item.tasks"
+        class="py:.25em flex align-items:start flex>span letter-spacing:.01em ~color|.2s@motion"
+        :class="[
+          `${
+            !query.isList && task.editable
+              ? 'cursor:pointer'
+              : 'pointer-events:none'
+          }`, { 'color:darkgray grayscale(100%) text:line-through': !query.isList && task.completed }
+        ]"
+        @click.prevent="if (!query.isList) toggleCompleted(item, taskId);"
+      >
+        <span v-if="query.isList && !query.isOrdered" class="mr:.1em translateY(.2em)|scale(.5)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" :fill="`${
+            query.isLight
+              ? style.lightTheme.color.replace('color:', '') :
+            query.isDark || prefer.darkMode
+              ? style.darkTheme.color.replace('color:', '')
+              : style.lightTheme.color.replace('color:', '')
+          }`">
+            <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z"/>
+          </svg>
+        </span>
+        <span v-if="!query.isList">
           <input
             type="checkbox" :name="task.task" :value="task.completed"
             class="
@@ -227,14 +219,14 @@
               "/>
             </svg>
           </span>
-          <span class="w:95% flex">
-            <span v-if="query.isOrdered">{{ taskId + 1 }}.&nbsp;</span>
-            <div class="word-break:break-all" :class="{ 'ml:.15em': !query.isOrdered }">
-              {{ task.task }}
-            </div>
-          </span>
-        </label>
-      </div>
+        </span>
+        <span>
+          <span v-if="query.isOrdered" :class="{ 'ml:.15em': query.isList }">{{ taskId + 1 }}.&nbsp;</span>
+          <div class="word-break:break-all" :class="{ 'ml:.15em': !query.isOrdered }">
+            {{ task.task }}
+          </div>
+        </span>
+      </label>
     </div>
   </section>
 
