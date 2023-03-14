@@ -190,12 +190,12 @@
           <input
             type="checkbox" :name="task.task" :value="task.completed"
             class="
-              mr:.3em translateY(.15em) w:1em h:1em
+              mr:.3em translateY(.2em) w:1em h:1em
               accent-color:gray outline:.1em|solid|steelblue:focus
               appearance:none position:absolute"
             v-effect="task.completed ? $el.setAttribute('checked', true) : $el.removeAttribute('checked');"
           >
-          <span class="mr:.3em translateY(.15em)|scale(1.3)">
+          <span class="mr:.3em translateY(.2em)|scale(1.3)">
             <svg
               xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
               :fill="
