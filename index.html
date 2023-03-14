@@ -75,23 +75,25 @@
     v-cloak
     class="w:85vw my:1.5em my:1.25em@xs"
     :class="[`${style.group(`
-      min-width:20em w:auto max-width:26.5em
-      ${query.is3D ? `p:2em r:1em ${
-        query.isLight && item.open
-          ? style.lightTheme.neumorphism.pressed :
-        query.isLight
-          ? style.lightTheme.neumorphism.flat :
-        (query.isDark || prefer.darkMode) && item.open
-          ? style.darkTheme.neumorphism.pressed :
-        query.isDark || prefer.darkMode
-          ? style.darkTheme.neumorphism.flat :
-        item.open
-          ? style.lightTheme.neumorphism.pressed
-          : style.lightTheme.neumorphism.flat
-      }` : ''
-    }`, '@xs')}`, {
-      'cursor:pointer': !item.open,
-    }]"
+      min-width:20em w:auto ${
+      query.is3D
+        ? `max-width:26.5em p:2em r:1em ${
+          query.isLight && item.open
+            ? style.lightTheme.neumorphism.pressed :
+          query.isLight
+            ? style.lightTheme.neumorphism.flat :
+          (query.isDark || prefer.darkMode) && item.open
+            ? style.darkTheme.neumorphism.pressed :
+          query.isDark || prefer.darkMode
+            ? style.darkTheme.neumorphism.flat :
+          item.open
+            ? style.lightTheme.neumorphism.pressed
+            : style.lightTheme.neumorphism.flat
+          }` 
+        : 'max-width:22.5em'
+      }`, '@xs')}`,
+      { 'cursor:pointer': !item.open, }
+    ]"
     @click="if (!item.open) toggleOpen(item);"
   >
     <h2 class="flex align-items:center cursor:pointer" @click.stop="toggleOpen(item);">
