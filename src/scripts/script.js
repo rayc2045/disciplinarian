@@ -1,11 +1,11 @@
 import 'https://esm.sh/@master/css';
 import { createApp, reactive } from 'https://esm.sh/petite-vue';
-import confetti from 'https://esm.sh/canvas-confetti';
 import utils from './esm/utils.js';
 import style from './esm/style.js';
 import prefer from './esm/prefer.js';
 import query from './esm/query.js';
 import storage from './esm/localStorage.js';
+import confetti from './esm/confetti.js';
 
 const ROOT = '/public/txt';
 const tutorialFile = `${ROOT}/如何使用 TXT Todo.txt`;
@@ -123,7 +123,7 @@ const App = {
 
     if (item.tasks.every(task => task.completed)) {
       for (const task of item.tasks) task.editable = false;
-      this.confetti(3);
+      confetti.basicCannon(150);
       setTimeout(() => {
         if (query.isCycle) {
           if (!query.isStrict)
@@ -173,10 +173,6 @@ const App = {
       filePath: this.filePath,
       items,
     });
-  },
-  confetti(times = 0) {
-    confetti();
-    if (times > 1) this.confetti(times - 1);
   },
 };
 
