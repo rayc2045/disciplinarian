@@ -1,11 +1,19 @@
 import confetti from 'https://esm.sh/canvas-confetti';
 
 export default {
-  basicCannon(count = 100) {
+  basicCannon(particleCount = 100, origin = { y: 0.6 }) {
     confetti({
-      particleCount: count,
+      particleCount,
       spread: 70,
-      origin: { y: 0.6 },
+      origin,
+    });
+  },
+  elementPosition(particleCount = 100, element) {
+    if (element.tagName === 'BODY') return this.basicCannon(particleCount);
+    const el = element.getBoundingClientRect();
+    this.basicCannon(particleCount, {
+      x: (el.left + el.right) / 2 / window.innerWidth,
+      y: (el.top + el.bottom) / 2 / window.innerHeight,
     });
   },
   randomDirection() {
