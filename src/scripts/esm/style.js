@@ -9,14 +9,14 @@ export default {
   },
   darkTheme: {
     color: 'color:#eee',
-    bg: 'bg:#111',
+    bg: 'bg:#151515',
     neumorphism: {
       flat: 'box-shadow:10px|10px|20px|black,-10px|-10px|20px|#222',
       pressed: 'box-shadow:inset|10px|10px|20px|black,inset|-10px|-10px|20px|#222',
     },
   },
   lightTheme: {
-    color: 'color:#111',
+    color: 'color:#151515',
     bg: 'bg:whitesmoke',
     neumorphism: {
       flat: 'box-shadow:10px|10px|20px|#DADADA,-10px|-10px|20px|white',
