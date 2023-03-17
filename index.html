@@ -39,7 +39,7 @@
 </head>
 <body
   class="
-    grid place-content:center pb:1.25em min-height:100vh
+    grid place-content:center min-height:100vh
     font:1.2em font:1vw@3xl line-height:1.25 user-select:none"
   :class="
     query.isLight
@@ -51,9 +51,9 @@
   @vue:mounted="init()"
   @contextmenu.prevent="$event.target.click()"
 >
-  <header
+  <main
     v-cloak
-    class="sticky top:0 pt:2.5em pb:1.5em w:85vw z:1 ~top|.5s"
+    class="w:85vw z:1 ~top|.5s"
     :class="`${
       style.group('min-width:20em w:auto max-width:26.5em', '@xs')
     } ${
@@ -65,7 +65,7 @@
     }`"
   >
     <h1
-      class="word-break:break-all font:1.75em"
+      class="my:1.5em word-break:break-all font:1.75em"
       :class="[
         query.isLight && !query.isList && totalProgress > 50
           ? 'color:royalblue' :
@@ -78,176 +78,174 @@
         !query.isList && totalProgress > 50
           ? 'color:royalblue'
           : 'color:indianred',
-        { 'ml:1.15em@xs': query.is3D, }
+        { 'pl:1.15em@xs': query.is3D, }
       ]"
     >
       <span v-show="promptMessage" class="font-size:.57em">({{ promptMessage }})<br></span>
       <span>{{ utils.getUppercaseFileName(filePath) }}</span>
     </h1>
-  </header>
-
-  <section
-    v-for="item of items"
-    v-cloak
-    class="w:85vw my:1.5em my:1.25em@xs"
-    :class="[`${style.group(`
-      min-width:20em w:auto ${
-      query.is3D
-        ? `max-width:26.5em p:2em r:1em ${
-          query.isLight && item.open
-            ? style.lightTheme.neumorphism.pressed :
-          query.isLight
-            ? style.lightTheme.neumorphism.flat :
-          (query.isDark || prefer.darkMode) && item.open
-            ? style.darkTheme.neumorphism.pressed :
-          query.isDark || prefer.darkMode
-            ? style.darkTheme.neumorphism.flat :
-          item.open
-            ? style.lightTheme.neumorphism.pressed
-            : style.lightTheme.neumorphism.flat
-          }` 
-        : 'max-width:22.5em'
-      }`, '@xs')}`,
-      { 'cursor:pointer': !item.open, }
-    ]"
-    @click="if (!item.open) toggleOpen(item);"
-  >
-    <h2 class="flex align-items:center cursor:pointer" @click.stop="toggleOpen(item);">
-      <span class="ml:-.2em ~transform|.2s@motion" :class="
-        item.open
-          ? 'translateY(.1em)|scale(1.35)|rotate(90deg)'
-          : 'translateY(.1em)|scale(1.35)'"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
-          :fill="
+    <section
+      v-for="item of items"
+      v-cloak
+      class="my:3em my:2.5em@xs"
+      :class="[style.group(`${
+        query.is3D
+          ? `p:2em r:1em ${
+            query.isLight && item.open
+              ? style.lightTheme.neumorphism.pressed :
             query.isLight
-              ? style.lightTheme.color.replace('color:', '') :
+              ? style.lightTheme.neumorphism.flat :
+            (query.isDark || prefer.darkMode) && item.open
+              ? style.darkTheme.neumorphism.pressed :
             query.isDark || prefer.darkMode
-              ? style.darkTheme.color.replace('color:', '')
-              : style.lightTheme.color.replace('color:', '')"
-        >
-          <path d="M10 17l5-5-5-5v10z"/>
-        </svg>
-      </span>
-      <span :class="[style.truncate, { 'mr:.5em': !item.completeTimes && item.progress }]">
-        {{ item.title }}
-      </span>
-      <sup
-        v-if="!query.isList && query.isCycle"
-        class="~opacity|.2s@motion"
-        :class="[
-          item.completeTimes
-            ? 'ml:.3em'
-            : 'opacity:0 position:absolute',
-          { 'mr:.5em': item.progress }
-        ]"
-      >
-        {{ item.completeTimes }}
-      </sup>
-      <span
-        v-if="!query.isList"
-        v-show="item.progress"
-        class="ml:auto ~color|.2s@motion"
-        :class="
-          item.progress === 100
-            ? query.isLight
-                ? 'color:silver' :
-              query.isDark || prefer.darkMode
-                ? 'color:gray'
-                : 'color:silver'
-            : ''"
-      >
-        {{ item.progress }}%
-      </span>
-    </h2>
-    <div
-      class="~transform|.2s@motion"
-      :class="
-        item.open
-          ? 'translateY(0)'
-          : `translateY(-.75em) ${style.hidden}`"
+              ? style.darkTheme.neumorphism.flat :
+            item.open
+              ? style.lightTheme.neumorphism.pressed
+              : style.lightTheme.neumorphism.flat
+            }` 
+          : 'max-width:calc(100%-4em)'
+        }`, '@xs'),
+        { 'cursor:pointer': !item.open, }
+      ]"
+      @click="if (!item.open) toggleOpen(item);"
     >
-      <hr class="my:.5em border-bottom:.07em|solid">
-      <div v-if="item.descriptions.length" class="letter-spacing:.01em text:justify">
-        <p v-for="description of item.descriptions" class="my:.75em font-size:.95em">
-          {{ description }}
-        </p>
-      </div>
-      <hr v-if="item.descriptions.length && item.tasks.length" class="my:.5em border-bottom:.07em|outset">
-      <label
-        v-for="(task, taskId) of item.tasks"
-        class="py:.25em flex align-items:start flex>span letter-spacing:.01em ~color|.2s@motion"
-        :class="[
-          !query.isList && task.editable
-            ? 'cursor:pointer'
-            : 'pointer-events:none',
-          {
-            'color:darkgray grayscale(100%) text:line-through': !query.isList && task.completed,
-          }
-        ]"
-        @click.prevent="if (!query.isList) toggleCompleted(item, taskId);"
-      >
-        <span v-if="query.isList && !query.isOrdered" class="mr:.1em translateY(.2em)|scale(.5)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" :fill="
-            query.isLight
-              ? style.lightTheme.color.replace('color:', '') :
-            query.isDark || prefer.darkMode
-              ? style.darkTheme.color.replace('color:', '')
-              : style.lightTheme.color.replace('color:', '')"
+      <h2 class="flex align-items:center cursor:pointer" @click.stop="toggleOpen(item);">
+        <span class="ml:-.2em ~transform|.2s@motion" :class="
+          item.open
+            ? 'translateY(.1em)|scale(1.35)|rotate(90deg)'
+            : 'translateY(.1em)|scale(1.35)'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+            :fill="
+              query.isLight
+                ? style.lightTheme.color.replace('color:', '') :
+              query.isDark || prefer.darkMode
+                ? style.darkTheme.color.replace('color:', '')
+                : style.lightTheme.color.replace('color:', '')"
           >
-            <path :d="
-              query.isOutlined
-                ? 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z'
-                : 'M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z'"
-            />
+            <path d="M10 17l5-5-5-5v10z"/>
           </svg>
         </span>
-        <span v-if="!query.isList">
-          <input
-            type="checkbox" :name="task.task" :value="task.completed"
-            class="
-              mr:.3em translateY(.2em) w:1em h:1em
-              accent-color:gray outline:.1em|solid|steelblue:focus
-              appearance:none position:absolute"
-            v-effect="task.completed ? $el.setAttribute('checked', true) : $el.removeAttribute('checked');"
-          >
-          <span class="mr:.3em translateY(.2em)|scale(1.3)">
-            <svg
-              xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
-              :fill="
-                query.isLight && task.completed
-                  ? 'gray' :
-                query.isLight
-                  ? 'dimgray' :
-                (query.isDark || prefer.darkMode) && task.completed
-                  ? 'lightgray' :
+        <span :class="[style.truncate, { 'mr:.5em': !item.completeTimes && item.progress }]">
+          {{ item.title }}
+        </span>
+        <sup
+          v-if="!query.isList && query.isCycle"
+          class="~opacity|.2s@motion"
+          :class="[
+            item.completeTimes
+              ? 'ml:.3em'
+              : 'opacity:0 position:absolute',
+            { 'mr:.5em': item.progress }
+          ]"
+        >
+          {{ item.completeTimes }}
+        </sup>
+        <span
+          v-if="!query.isList"
+          v-show="item.progress"
+          class="ml:auto ~color|.2s@motion"
+          :class="
+            item.progress === 100
+              ? query.isLight
+                  ? 'color:silver' :
                 query.isDark || prefer.darkMode
-                  ? 'darkgray' :
-                task.completed
-                  ? 'gray'
-                  : 'dimgray'"
-              class="~fill|.2s@motion"
+                  ? 'color:gray'
+                  : 'color:silver'
+              : ''"
+        >
+          {{ item.progress }}%
+        </span>
+      </h2>
+      <div
+        class="~transform|.2s@motion"
+        :class="
+          item.open
+            ? 'translateY(0)'
+            : `translateY(-.75em) ${style.hidden}`"
+      >
+        <hr class="my:.5em border-bottom:.07em|solid">
+        <div v-if="item.descriptions.length" class="letter-spacing:.01em text:justify">
+          <p v-for="description of item.descriptions" class="my:.75em font-size:.95em">
+            {{ description }}
+          </p>
+        </div>
+        <hr v-if="item.descriptions.length && item.tasks.length" class="my:.5em border-bottom:.07em|outset">
+        <label
+          v-for="(task, taskId) of item.tasks"
+          class="py:.25em flex align-items:start flex>span letter-spacing:.01em overflow:hidden ~color|.2s@motion"
+          :class="[
+            !query.isList && task.editable
+              ? 'cursor:pointer'
+              : 'pointer-events:none',
+            {
+              'color:darkgray grayscale(100%) text:line-through': !query.isList && task.completed,
+            }
+          ]"
+          @click.prevent="if (!query.isList) toggleCompleted(item, taskId);"
+        >
+          <span v-if="query.isList && !query.isOrdered" class="mr:.1em translateY(.2em)|scale(.5)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" :fill="
+              query.isLight
+                ? style.lightTheme.color.replace('color:', '') :
+              query.isDark || prefer.darkMode
+                ? style.darkTheme.color.replace('color:', '')
+                : style.lightTheme.color.replace('color:', '')"
             >
               <path :d="
-                task.completed && query.isOutlined
-                  ? 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM17.99 9l-1.41-1.42-6.59 6.59-2.58-2.57-1.42 1.41 4 3.99z' :
-                task.completed
-                  ? 'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'
-                  : 'M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z'"
+                query.isOutlined
+                  ? 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z'
+                  : 'M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z'"
               />
             </svg>
           </span>
-        </span>
-        <span>
-          <span v-if="query.isOrdered" :class="{ 'ml:.15em': query.isList }">{{ taskId + 1 }}.&nbsp;</span>
-          <div class="word-break:break-all" :class="{ 'ml:.15em': !query.isOrdered }">
-            {{ task.task }}
-          </div>
-        </span>
-      </label>
-    </div>
-  </section>
+          <span v-if="!query.isList" class="position:relative">
+            <input
+              type="checkbox" :name="task.task" :value="task.completed"
+              class="
+                mr:.3em translateY(.2em) w:1em h:1em
+                accent-color:gray outline:.1em|solid|steelblue:focus
+                appearance:none position:absolute left:-100%"
+              v-effect="task.completed ? $el.setAttribute('checked', true) : $el.removeAttribute('checked');"
+            >
+            <span class="mr:.3em translateY(.2em)|scale(1.3)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"
+                :fill="
+                  query.isLight && task.completed
+                    ? 'gray' :
+                  query.isLight
+                    ? 'dimgray' :
+                  (query.isDark || prefer.darkMode) && task.completed
+                    ? 'lightgray' :
+                  query.isDark || prefer.darkMode
+                    ? 'darkgray' :
+                  task.completed
+                    ? 'gray'
+                    : 'dimgray'"
+                class="~fill|.2s@motion"
+              >
+                <path :d="
+                  task.completed && query.isOutlined
+                    ? 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM17.99 9l-1.41-1.42-6.59 6.59-2.58-2.57-1.42 1.41 4 3.99z' :
+                  task.completed
+                    ? 'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'
+                    : 'M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z'"
+                />
+              </svg>
+            </span>
+          </span>
+          <span>
+            <span v-if="query.isOrdered" :class="{ 'ml:.15em': query.isList }">{{ taskId + 1 }}.&nbsp;</span>
+            <div class="word-break:break-all" :class="{ 'ml:.15em': !query.isOrdered }">
+              {{ task.task }}
+            </div>
+          </span>
+        </label>
+      </div>
+    </section>
+  </main>
 
   <div
     v-if="!query.isList && !query.isCycle"
@@ -301,8 +299,8 @@
       width: 1em; height: 1em; margin-inline: auto;
       border-width: .15em; border-radius: 50%;
       border-right-color: transparent;
-      animation: spin 1s linear infinite;
-    "></div>
+      animation: spin 1s linear infinite;"
+    ></div>
   </div>
 </body>
 </html>
