@@ -1,14 +1,15 @@
 export default {
   group(style, to) {
+    style = style.trim();
+    if (!style) return '';
     return `{${style
-      .trim()
       .split(' ')
       .filter(s => s.length)
       .map(s => s.replaceAll('\n', ''))
       .join(';')}}${to}`;
   },
   darkTheme: {
-    color: 'color:#eee',
+    color: 'color:#EEE',
     bg: 'bg:#151515',
     neumorphism: {
       flat: 'box-shadow:10px|10px|20px|black,-10px|-10px|20px|#222',
