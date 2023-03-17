@@ -4,7 +4,7 @@ export default {
   basicCannon(particleCount = 100, origin = { y: 0.6 }) {
     confetti({
       particleCount,
-      spread: 70,
+      spread: 50,
       origin,
     });
   },

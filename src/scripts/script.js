@@ -127,7 +127,7 @@ const App = {
 
     if (item.tasks.every(task => task.completed)) {
       for (const task of item.tasks) task.editable = false;
-      confetti.basicCannon(150);
+      confetti.basicCannon();
       setTimeout(() => {
         if (query.isCycle) {
           if (!query.isStrict)
