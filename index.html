@@ -55,14 +55,15 @@
     v-cloak
     class="w:85vw z:1 ~top|.5s"
     :class="`${
-      style.group('min-width:20em w:auto max-width:26.5em', '@xs')
-    } ${
+      style.group(`min-width:20em w:auto max-width:${
+        query.is3D ? '26.5em' : '22.5em'
+      }`, '@xs') } ${
       query.isLight
         ? style.lightTheme.bg :
       query.isDark || prefer.darkMode
         ? style.darkTheme.bg
         : style.lightTheme.bg
-    }`"
+      }`"
   >
     <h1
       class="my:1.5em word-break:break-all font:1.75em"
@@ -103,7 +104,7 @@
               ? style.lightTheme.neumorphism.pressed
               : style.lightTheme.neumorphism.flat
             }` 
-          : 'max-width:calc(100%-4em)'
+          : ''
         }`, '@xs'),
         { 'cursor:pointer': !item.open, }
       ]"
