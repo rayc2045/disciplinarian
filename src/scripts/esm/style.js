@@ -23,6 +23,8 @@ export default {
       pressed: 'box-shadow:inset|10px|10px|20px|#DADADA,inset|-10px|-10px|20px|white',
     },
   },
+  absoluteCenter: 'position:absolute left:50% top:50% translate(-50%,-50%)',
+  flexCenter: 'flex justify-content:center align-items:center',
   hidden: 'max-height:0px overflow:hidden',
   truncate: 'max-width:100% white-space:nowrap overflow:hidden text-overflow:ellipsis',
 };
