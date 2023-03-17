@@ -26,12 +26,12 @@ const App = {
   totalProgress: 0,
   async init() {
     if (!query.isSave) {
-      await this.parseTxt();
+      await this.parseFile();
       if (!query.isCycle) this.updateTotalProgress();
       this.updateSiteTitle();
       return storage.delete(STORAGE_KEY);
     }
-    if (!store.items?.length) await this.parseTxt();
+    if (!store.items?.length) await this.parseFile();
     else {
       for (const storeItem of store.items) {
         if (query.isOpen) storeItem.open = true;
@@ -59,16 +59,20 @@ const App = {
     this.updateSiteTitle();
     this.save();
   },
-  async parseTxt() {
-    const res = await utils.fetchText(fetchFile, tutorialFile);
+  async parseFile() {
+    const res = await utils.readTextFile(fetchFile, tutorialFile);
     if (!query.file) this.promptMessage = '未指定檔案';
     else if (res.status === 'Blocked') this.promptMessage = '檔案讀取失敗';
     else if (res.status === 'Not found') this.promptMessage = '找不到檔案';
-
-    this.filePath = res.file;
-
-    const content =
-      res.text.trim() ||
+    this.renderTodo(res);
+  },
+  renderTodo({ file, text }) {
+    this.filePath = file;
+    this.parseText(text);
+  },
+  parseText(text) {
+    text =
+      text.trim() ||
       `
       沒有顯示內容？
       - 檢查 ${fetchFile} 檔案
@@ -77,7 +81,7 @@ const App = {
       - 如果想開啟自動儲存功能，在網址中加入「autosave」查詢字串再重新載入
     `;
 
-    for (const paragraph of content.split('\n\n')) {
+    for (const paragraph of text.split('\n\n')) {
       if (!paragraph.trim() || paragraph.startsWith('//')) continue;
       const data = { title: '', descriptions: [], tasks: [] };
       paragraph
@@ -183,17 +187,18 @@ window.onload = () => {
   document.querySelector('#loader').remove();
 };
 
-let oldScrollY = window.scrollY;
+// let oldScrollY = window.scrollY;
 
 window.onscroll = () => {
-  const headerEl = document.querySelector('header');
-  const headerHeight = headerEl.getBoundingClientRect().height;
-  if (oldScrollY < window.scrollY) headerEl.style.top = `-${headerHeight}px`;
+  // // <header class="sticky top:0">
+  // const headerEl = document.querySelector('header');
+  // const headerHeight = headerEl.getBoundingClientRect().height;
+  // if (oldScrollY < window.scrollY) headerEl.style.top = `-${headerHeight}px`;
   // else if (!utils.isVisible(headerEl)) headerEl.style.top = '0px';
-  oldScrollY = window.scrollY;
+  // oldScrollY = window.scrollY;
 
   if (!query.isClose) return;
-  const sectionEls = Array.from(document.querySelectorAll('section'));
+  const sectionEls = Array.from(document.querySelectorAll('main > section'));
   sectionEls.forEach((sectionEl, idx) => {
     if (!utils.isVisible(sectionEl)) App.toggleOpen(items[idx], false);
   });

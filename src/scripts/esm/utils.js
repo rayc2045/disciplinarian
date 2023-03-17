@@ -4,7 +4,7 @@ export default {
     const urlSearchParams = new URLSearchParams(urlSearch);
     return Object.fromEntries(urlSearchParams.entries());
   },
-  async fetchText(file, defaultFile) {
+  async readTextFile(file, defaultFile) {
     let res;
     let status = 'Ok';
     try {
