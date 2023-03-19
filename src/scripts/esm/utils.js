@@ -64,7 +64,7 @@ export default {
       let startTime = null;
       let current = parseFloat(start);
       const range = parseFloat(end) - parseFloat(start);
-      
+
       const decimalPlaces = Math.max(
         ...[start, end].map(num => {
           const numStr = num.toString();
@@ -72,15 +72,15 @@ export default {
           return numStr.split('.')[1].length;
         })
       );
+      if (decimalPlaces > 3) decimalPlaces = 3;
 
       function update(currentTime) {
         if (!startTime) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
         current = parseFloat(start) + progress * range;
-        element.textContent = current.toFixed(decimalPlaces);
+        element.textContent = parseFloat(current.toFixed(decimalPlaces));
         if (progress < 1) return requestAnimationFrame(update);
-        element.textContent = parseFloat(element.textContent);
         resolve();
       }
 
