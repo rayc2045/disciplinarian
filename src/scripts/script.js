@@ -118,26 +118,43 @@ const App = {
     item.open = open;
     if (query.isSave) this.save();
   },
-  toggleCompleted(item, taskId) {
+  async toggleCompleted(item, taskId, el) {
     const task = item.tasks[taskId];
     if (!task.editable) return;
     task.completed = !task.completed;
     this.update(item);
     if (!query.isCycle) this.updateTotalProgress();
 
-    if (item.tasks.every(task => task.completed)) {
-      for (const task of item.tasks) task.editable = false;
-      confetti.basicCannon();
-      setTimeout(() => {
-        if (query.isCycle) {
-          if (!query.isStrict)
-            for (const task of item.tasks) task.editable = true;
-          return this.reset(item);
-        }
-        if (query.isStrict) return (item.tasks.at(-1).editable = true);
-        for (const task of item.tasks) task.editable = true;
-      }, 3000);
+    const progressEl = el
+      .closest('section')
+      .querySelector('h2 > span:last-of-type');
+
+    async function animateProgress() {
+      await utils.animateNumber(
+        progressEl,
+        progressEl.textContent,
+        item.progress,
+        300
+      );
     }
+
+    if (item.progress < 100) {
+      if (prefer.motion) await animateProgress();
+      return;
+    }
+
+    for (const task of item.tasks) task.editable = false;
+    if (prefer.motion) await animateProgress();
+    confetti.basicCannon();
+    setTimeout(() => {
+      if (query.isCycle) {
+        if (!query.isStrict)
+          for (const task of item.tasks) task.editable = true;
+        return this.reset(item);
+      }
+      if (query.isStrict) return (item.tasks.at(-1).editable = true);
+      for (const task of item.tasks) task.editable = true;
+    }, 3000);
   },
   updateTotalProgress() {
     let completedNum = 0;

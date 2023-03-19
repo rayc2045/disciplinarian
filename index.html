@@ -140,7 +140,7 @@
         <span
           v-if="!query.isList"
           v-show="item.progress"
-          class="ml:auto ~color|.2s@motion"
+          class="ml:auto content:'%':after ~color|.2s@motion"
           :class="
             item.progress === 100
               ? query.isLight
@@ -150,7 +150,7 @@
                   : 'color:silver'
               : ''"
         >
-          {{ item.progress }}%
+          {{ item.progress }}
         </span>
       </h2>
       <div
@@ -178,7 +178,7 @@
               'color:darkgray grayscale(100%) text:line-through': !query.isList && task.completed,
             }
           ]"
-          @click.prevent="if (!query.isList) toggleCompleted(item, taskId);"
+          @click.prevent="if (!query.isList) toggleCompleted(item, taskId, $el);"
         >
           <span v-if="query.isList && !query.isOrdered" class="mr:.1em translateY(.2em)|scale(.5)">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" :fill="

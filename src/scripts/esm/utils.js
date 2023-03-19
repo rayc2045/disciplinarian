@@ -59,6 +59,34 @@ export default {
   getProgress(num1, num2) {
     return Math.floor((num1 / num2) * 100);
   },
+  animateNumber(element, start, end, duration = 1000) {
+    return new Promise(resolve => {
+      let startTime = null;
+      let current = parseFloat(start);
+      const range = parseFloat(end) - parseFloat(start);
+      
+      const decimalPlaces = Math.max(
+        ...[start, end].map(num => {
+          const numStr = num.toString();
+          if (!numStr.includes('.')) return 0;
+          return numStr.split('.')[1].length;
+        })
+      );
+
+      function update(currentTime) {
+        if (!startTime) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        current = parseFloat(start) + progress * range;
+        element.textContent = current.toFixed(decimalPlaces);
+        if (progress < 1) return requestAnimationFrame(update);
+        element.textContent = parseFloat(element.textContent);
+        resolve();
+      }
+
+      requestAnimationFrame(update);
+    });
+  },
   isVisible(el) {
     const elTop = ~-el.getBoundingClientRect().top;
     const elBottom = ~-el.getBoundingClientRect().bottom;
