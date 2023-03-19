@@ -169,7 +169,7 @@
         <hr v-if="item.descriptions.length && item.tasks.length" class="my:.5em border-bottom:.07em|outset">
         <label
           v-for="(task, taskId) of item.tasks"
-          class="py:.25em flex align-items:start flex>span letter-spacing:.01em overflow:hidden ~color|.2s@motion"
+          class="py:.25em flex align-items:start flex>span letter-spacing:.01em overflow:hidden ~color|.1s@motion"
           :class="[
             !query.isList && task.editable
               ? 'cursor:pointer'
@@ -219,7 +219,6 @@
                   task.completed
                     ? 'gray'
                     : 'dimgray'"
-                class="~fill|.2s@motion"
               >
                 <path :d="
                   task.completed && query.isOutlined
