@@ -63,7 +63,7 @@
       class="my:1.5em word-break:break-all font:1.75em"
       :class="[
         query.isLight && !query.isList && totalProgress > 50
-          ? 'color:royalblue' :
+          ? 'color:steelblue' :
         query.isLight
           ? 'color:indianred' :
         (query.isDark || prefer.darkMode) && !query.isList && totalProgress > 50
@@ -71,7 +71,7 @@
         query.isDark || prefer.darkMode
           ? 'color:#FFA500' :
         !query.isList && totalProgress > 50
-          ? 'color:royalblue'
+          ? 'color:steelblue'
           : 'color:indianred',
         { 'pl:1.15em@xs': query.is3D, }
       ]"
@@ -246,7 +246,7 @@
     class="fixed top:0 h:.2em pointer-events:none z:1 ~width|.3s"
     :class="`w:${totalProgress}vw ${
       query.isLight && totalProgress > 50
-        ? 'bg:royalblue' :
+        ? 'bg:steelblue' :
       query.isLight
         ? 'bg:indianred' :
       (query.isDark || prefer.darkMode) && totalProgress > 50
@@ -254,7 +254,7 @@
       query.isDark || prefer.darkMode
         ? 'bg:#FFA500' :
       totalProgress > 50
-        ? 'bg:royalblue'
+        ? 'bg:steelblue'
         : 'bg:indianred'
     }`"
   ></div>
